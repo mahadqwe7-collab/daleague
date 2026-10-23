@@ -208,6 +208,16 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
   <div class="modal">
     <h2>Admin Management Control</h2>
 
+    <!-- AI MATCH SUMMARY PARSER -->
+    <div class="admin-section" style="background:#0a1726;padding:15px;border-radius:12px;border:1px solid var(--teal);">
+      <h3 style="color:var(--teal)">🤖 AI Match Summary Auto-Updater</h3>
+      <p class="sub" style="margin-bottom:8px;">Paste match report text (e.g., <i>"Team A defeated Team B. Ali scored 65 runs. Ahmed took 3 wickets."</i>)</p>
+      <div class="form-group">
+        <textarea id="aiSummaryText" rows="3" placeholder="Paste match summary here..." style="background:#07111f;color:white;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;font-size:12px;width:100%;resize:vertical;"></textarea>
+      </div>
+      <button class="btn primary" onclick="parseAndAutoUpdate()">Run AI Auto-Update</button>
+    </div>
+
     <!-- EDIT WEBSITE TEXT -->
     <div class="admin-section">
       <h3>Change Website Text & Headings</h3>
@@ -353,22 +363,13 @@ function generateDefaultSeasons(teamList){
 }
 
 const defaultFixtures = [];
-
 const defaultPlayers = [];
 
-// LOCALSTORAGE CLEANUP & SETUP
-let rawFixtures = localStorage.getItem('da_fixtures');
-let fixtures = [];
-try {
-  let parsed = JSON.parse(rawFixtures);
-  if(Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object' && parsed[0].title){
-    fixtures = parsed;
-  }
-} catch(e){}
-
+// LOCALSTORAGE SETUP
 let siteConfig = JSON.parse(localStorage.getItem('da_site_config')) || defaultSiteConfig;
 let teamsList = JSON.parse(localStorage.getItem('da_teams_list')) || defaultTeamsList;
 let seasonsData = JSON.parse(localStorage.getItem('da_seasons_data')) || generateDefaultSeasons(teamsList);
+let fixtures = JSON.parse(localStorage.getItem('da_fixtures')) || defaultFixtures;
 let players = JSON.parse(localStorage.getItem('da_players')) || defaultPlayers;
 
 function saveData(){
@@ -479,6 +480,69 @@ function verifyPassword(){
     loadTeamToEdit();
   } else {
     alert("Incorrect Password!");
+  }
+}
+
+// AI MATCH SUMMARY PARSER FUNCTION
+function parseAndAutoUpdate(){
+  const text = document.getElementById('aiSummaryText').value.trim();
+  if(!text){ alert("Please enter match summary text!"); return; }
+
+  let updated = false;
+  let currentTeams = seasonsData[activeSeason];
+
+  // 1. Detect Winner / Loser between teams
+  teamsList.forEach(t1 => {
+    teamsList.forEach(t2 => {
+      if(t1 === t2) return;
+      const winRegex = new RegExp(`${t1}\\s+(beat|defeated|won against)\\s+${t2}`, 'i');
+      if(winRegex.test(text)){
+        let winner = currentTeams.find(t => t.name === t1);
+        let loser = currentTeams.find(t => t.name === t2);
+        if(winner && loser){
+          winner.played += 1; winner.won += 1; winner.points += 2;
+          loser.played += 1; loser.lost += 1;
+          
+          fixtures.forEach(f => {
+            if((f.team1 === t1 && f.team2 === t2) || (f.team1 === t2 && f.team2 === t1)){
+              f.status = "Completed";
+              f.result = `${t1} won`;
+            }
+          });
+          updated = true;
+        }
+      }
+    });
+  });
+
+  // 2. Detect Player Runs & Wickets
+  players.forEach(p => {
+    const runRegex = new RegExp(`${p.name}[^.!?]*?(\\d+)\\s*runs`, 'i');
+    const runMatch = text.match(runRegex);
+    if(runMatch){
+      const runs = parseInt(runMatch[1]);
+      p.runs += runs;
+      p.matches += 1;
+      if(runs > p.highest) p.highest = runs;
+      updated = true;
+    }
+
+    const wktRegex = new RegExp(`${p.name}[^.!?]*?(\\d+)\\s*wickets`, 'i');
+    const wktMatch = text.match(wktRegex);
+    if(wktMatch){
+      const wkts = parseInt(wktMatch[1]);
+      p.wickets += wkts;
+      if(!runMatch) p.matches += 1;
+      updated = true;
+    }
+  });
+
+  if(updated){
+    saveData();
+    alert("AI successfully parsed summary and updated Points Table & Player Stats!");
+    document.getElementById('aiSummaryText').value = "";
+  } else {
+    alert("Could not automatically detect team match results or player stats. Ensure team and player names match exactly and use keywords like 'defeated', 'runs', 'wickets'.");
   }
 }
 
