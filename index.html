@@ -29,7 +29,7 @@ nav{min-height:72px;display:flex;justify-content:space-between;align-items:cente
 .eyebrow,.tag{display:inline-block;border:1px solid #f5b94255;background:#f5b94212;color:var(--gold);padding:7px 12px;border-radius:30px;font-size:11px;font-weight:800;letter-spacing:1px}
 h1{font-size:clamp(42px,8vw,78px);line-height:1.02;letter-spacing:-3px;margin:22px 0}
 .gradient{background:linear-gradient(90deg,var(--gold),var(--teal));color:transparent;-webkit-background-clip:text;background-clip:text}
-.btn{display:inline-block;margin:8px 8px 0 0;padding:11px 16px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;border:none}
+.btn{display:inline-block;margin:8px 8px 0 0;padding:13px 17px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;border:none}
 .primary{background:var(--gold);color:#111827}
 .secondary{background:var(--panel);border:1px solid var(--line);color:var(--text)}
 .danger{background:var(--red);color:#fff}
@@ -40,7 +40,7 @@ h2{font-size:clamp(25px,4vw,36px);margin:7px 0}
 .sub{color:var(--muted);font-size:12px;line-height:1.8}
 .season-grid,.team-grid,.player-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .season-card,.team-card,.player-card,.panel{background:linear-gradient(145deg,#11243a,#0b1828);border:1px solid var(--line);border-radius:16px;padding:20px}
-.season-card{min-height:185px;cursor:pointer}
+.season-card{min-height:185px}
 .season-card.active{border-color:var(--gold)}
 .season-number{font-size:10px;color:var(--teal);font-weight:900;letter-spacing:2px}
 .season-card h3{margin:15px 0 7px}
@@ -62,12 +62,12 @@ tr:last-child td{border-bottom:0}
 .metric{padding:10px;background:#071522;border:1px solid var(--line);border-radius:9px}
 .metric span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}
 .metric strong{display:block;font-size:16px;margin-top:5px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
-input,select{background:#0a1726;color:white;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;font-size:12px;width:100%}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+input,select{background:#0a1726;color:white;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;font-size:12px}
 
 /* Modal Overlay Styling */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:100}
-.modal{background:#102238;border:1px solid var(--line);border-radius:16px;padding:25px;width:min(550px,90%);max-height:85vh;overflow-y:auto}
+.modal{background:#102238;border:1px solid var(--line);border-radius:16px;padding:25px;width:min(500px,90%);max-height:85vh;overflow-y:auto}
 .admin-section{margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:15px}
 .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .form-group label{font-size:11px;color:var(--muted)}
@@ -101,4 +101,362 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
     <a class="btn primary" href="#standings">VIEW STANDINGS</a>
     <a class="btn secondary" href="#players">PLAYER RECORDS</a>
   </div>
-</
+</section>
+
+<section id="seasons">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Tournament timeline</div>
+      <h2>Explore Seasons</h2>
+    </div>
+    <div class="season-grid">
+      <article class="season-card active">
+        <div class="season-number">SEASON 01</div>
+        <h3>DA League — Season 1</h3>
+        <p>Current season standings, fixtures and player records.</p>
+        <span class="status">● CURRENT SEASON</span>
+      </article>
+      <article class="season-card">
+        <div class="season-number">SEASON 02</div>
+        <h3>Season 2</h3>
+        <span class="status soon">◷ COMING SOON</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="standings">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">League overview</div>
+      <h2>Points Table</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Pos</th><th>Team</th><th>Played</th><th>Won</th><th>Lost</th><th>NRR</th><th>Points</th></tr></thead>
+        <tbody id="pointsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="fixtures">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Match centre</div>
+      <h2>Fixtures</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Match</th><th>Fixture</th><th>Result</th><th>Status</th></tr></thead>
+        <tbody id="fixturesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="players">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Performance centre</div>
+      <h2>Player Records</h2>
+    </div>
+    <div class="toolbar">
+      <input id="playerSearch" type="search" placeholder="Search player or team...">
+      <select id="teamFilter">
+        <option value="All">All teams</option>
+      </select>
+    </div>
+    <div class="player-grid" id="playerGrid"></div>
+  </div>
+</section>
+
+<section id="orange-cap">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Batting leaderboard</div>
+      <h2><span class="gold">Orange Cap</span></h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>Runs</th><th>Highest</th></tr></thead>
+        <tbody id="orangeBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="purple-cap">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Bowling leaderboard</div>
+      <h2><span class="purple">Purple Cap</span></h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>Wickets</th><th>Economy</th></tr></thead>
+        <tbody id="purpleBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="teams">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">League teams</div>
+      <h2>Teams</h2>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+</section>
+</main>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <div class="form-group">
+      <label>Enter Admin Password (Default: admin123)</label>
+      <input type="password" id="adminPassword" placeholder="Password">
+    </div>
+    <button class="btn primary" onclick="verifyPassword()">Login</button>
+    <button class="btn secondary" onclick="closeModal('loginModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL MODAL -->
+<div id="adminModal" class="modal-overlay">
+  <div class="modal">
+    <h2>Admin Dashboard</h2>
+    
+    <!-- EDIT POINTS TABLE -->
+    <div class="admin-section">
+      <h3>Update Standings / Points Table</h3>
+      <div class="form-group">
+        <label>Select Team</label>
+        <select id="editTeamSelect" onchange="loadTeamToEdit()"></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label>Played</label><input type="number" id="editPlayed"></div>
+        <div class="form-group"><label>Won</label><input type="number" id="editWon"></div>
+        <div class="form-group"><label>Lost</label><input type="number" id="editLost"></div>
+        <div class="form-group"><label>Points</label><input type="number" id="editPoints"></div>
+      </div>
+      <div class="form-group"><label>NRR</label><input type="text" id="editNrr"></div>
+      <button class="btn primary" onclick="saveTeamChanges()">Save Team Stats</button>
+    </div>
+
+    <!-- ADD PLAYER -->
+    <div class="admin-section">
+      <h3>Add New Player</h3>
+      <div class="form-group"><label>Name</label><input type="text" id="newPlayerName"></div>
+      <div class="form-group"><label>Team</label><select id="newPlayerTeam"></select></div>
+      <div class="form-group"><label>Role</label><input type="text" id="newPlayerRole" placeholder="Batter / Bowler"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label>Matches</label><input type="number" id="newPlayerMatches" value="0"></div>
+        <div class="form-group"><label>Runs</label><input type="number" id="newPlayerRuns" value="0"></div>
+        <div class="form-group"><label>Highest Score</label><input type="number" id="newPlayerHighest" value="0"></div>
+        <div class="form-group"><label>Average</label><input type="text" id="newPlayerAvg" value="0.0"></div>
+        <div class="form-group"><label>Strike Rate</label><input type="text" id="newPlayerSR" value="0.0"></div>
+        <div class="form-group"><label>Wickets</label><input type="number" id="newPlayerWickets" value="0"></div>
+        <div class="form-group"><label>Economy</label><input type="text" id="newPlayerEco" value="0.0"></div>
+      </div>
+      <button class="btn primary" onclick="addNewPlayer()">Add Player</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;">
+      <button class="btn secondary" onclick="closeModal('adminModal')">Close Dashboard</button>
+      <button class="btn danger" onclick="resetDefaultData()">Reset All Data</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">DA LEAGUE · SEASON HUB</div>
+</footer>
+
+<script>
+// INITIAL DEFAULT DATA
+const defaultTeams = [
+  {name:"Team A",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#f5b942"},
+  {name:"Team B",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#27d3b0"},
+  {name:"Team C",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#55a7ff"},
+  {name:"Team D",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#b39aff"}
+];
+
+const defaultFixtures = [
+  ["Match 1","Team A","Team B","Upcoming","—"],
+  ["Match 2","Team C","Team D","Upcoming","—"],
+  ["Match 3","Team A","Team C","Upcoming","—"],
+  ["Match 4","Team B","Team D","Upcoming","—"]
+];
+
+const defaultPlayers = [
+  {name:"Example Player 1",team:"Team A",role:"Batter",matches:4,runs:180,highest:65,average:"45.0",strikeRate:"140.2",wickets:1,economy:"8.5"},
+  {name:"Example Player 2",team:"Team B",role:"All-rounder",matches:3,runs:95,highest:42,average:"31.6",strikeRate:"125.0",wickets:5,economy:"6.8"}
+];
+
+// LOAD DATA FROM LOCAL STORAGE OR INITIALIZE
+let teams = JSON.parse(localStorage.getItem('da_teams')) || defaultTeams;
+let fixtures = JSON.parse(localStorage.getItem('da_fixtures')) || defaultFixtures;
+let players = JSON.parse(localStorage.getItem('da_players')) || defaultPlayers;
+
+function saveData(){
+  localStorage.setItem('da_teams', JSON.stringify(teams));
+  localStorage.setItem('da_fixtures', JSON.stringify(fixtures));
+  localStorage.setItem('da_players', JSON.stringify(players));
+  renderAll();
+}
+
+function renderAll(){
+  renderStandings();
+  renderPlayers();
+  populateDropdowns();
+}
+
+function renderStandings(){
+  document.getElementById("pointsBody").innerHTML = [...teams]
+    .sort((a,b)=>b.points-a.points)
+    .map((t,i)=>`<tr>
+      <td>${i+1}</td><td>${t.name}</td><td>${t.played}</td>
+      <td>${t.won}</td><td>${t.lost}</td><td>${t.nrr}</td>
+      <td class="gold">${t.points}</td></tr>`).join("");
+
+  document.getElementById("fixturesBody").innerHTML = fixtures
+    .map(f=>`<tr><td>${f[0]}</td><td>${f[1]} vs ${f[2]}</td>
+      <td>${f[4]}</td><td><span class="tag">${f[3]}</span></td></tr>`).join("");
+
+  document.getElementById("teamGrid").innerHTML = teams
+    .map(t=>`<article class="team-card">
+      <div style="color:${t.color};font-size:12px;font-weight:900">DA LEAGUE TEAM</div>
+      <h3>${t.name}</h3><p>Points: ${t.points} | Played: ${t.played}</p></article>`).join("");
+}
+
+function renderPlayers(){
+  const query = document.getElementById("playerSearch").value.toLowerCase();
+  const team = document.getElementById("teamFilter").value;
+
+  const filtered = players.filter(p =>
+    (p.name+" "+p.team+" "+p.role).toLowerCase().includes(query) &&
+    (team==="All" || p.team===team)
+  );
+
+  document.getElementById("playerGrid").innerHTML = filtered.length
+    ? filtered.map(p=>`<article class="player-card">
+      <div class="player-name">${p.name}</div>
+      <div class="player-meta">${p.team} · ${p.role}</div>
+      <div class="metrics">
+        <div class="metric"><span>Matches</span><strong>${p.matches}</strong></div>
+        <div class="metric"><span>Runs</span><strong>${p.runs}</strong></div>
+        <div class="metric"><span>Highest</span><strong>${p.highest}</strong></div>
+        <div class="metric"><span>Average</span><strong>${p.average}</strong></div>
+        <div class="metric"><span>SR</span><strong>${p.strikeRate}</strong></div>
+        <div class="metric"><span>Wickets</span><strong>${p.wickets}</strong></div>
+        <div class="metric"><span>Economy</span><strong>${p.economy}</strong></div>
+      </div></article>`).join("")
+    : '<div class="player-card">No players found.</div>';
+
+  const batting = [...players].sort((a,b)=>b.runs-a.runs);
+  document.getElementById("orangeBody").innerHTML = batting.slice(0,5)
+    .map((p,i)=>`<tr><td>${i+1}</td><td>${p.name}</td><td>${p.team}</td><td>${p.runs}</td><td>${p.highest}</td></tr>`).join("");
+
+  const bowling = [...players].sort((a,b)=>b.wickets-a.wickets);
+  document.getElementById("purpleBody").innerHTML = bowling.slice(0,5)
+    .map((p,i)=>`<tr><td>${i+1}</td><td>${p.name}</td><td>${p.team}</td><td>${p.wickets}</td><td>${p.economy}</td></tr>`).join("");
+}
+
+function populateDropdowns(){
+  const teamFilter = document.getElementById("teamFilter");
+  const editTeamSelect = document.getElementById("editTeamSelect");
+  const newPlayerTeam = document.getElementById("newPlayerTeam");
+
+  const options = teams.map(t=>`<option value="${t.name}">${t.name}</option>`).join("");
+  
+  teamFilter.innerHTML = `<option value="All">All teams</option>` + options;
+  editTeamSelect.innerHTML = options;
+  newPlayerTeam.innerHTML = options;
+}
+
+// ADMIN PANEL LOGIC
+function openLoginModal(){ document.getElementById('loginModal').style.display='flex'; }
+function closeModal(id){ document.getElementById(id).style.display='none'; }
+
+function verifyPassword(){
+  const pass = document.getElementById('adminPassword').value;
+  if(pass === "admin123"){
+    closeModal('loginModal');
+    document.getElementById('adminModal').style.display='flex';
+    loadTeamToEdit();
+  } else {
+    alert("Incorrect Password!");
+  }
+}
+
+function loadTeamToEdit(){
+  const selectedName = document.getElementById('editTeamSelect').value;
+  const team = teams.find(t=>t.name === selectedName);
+  if(team){
+    document.getElementById('editPlayed').value = team.played;
+    document.getElementById('editWon').value = team.won;
+    document.getElementById('editLost').value = team.lost;
+    document.getElementById('editPoints').value = team.points;
+    document.getElementById('editNrr').value = team.nrr;
+  }
+}
+
+function saveTeamChanges(){
+  const selectedName = document.getElementById('editTeamSelect').value;
+  const team = teams.find(t=>t.name === selectedName);
+  if(team){
+    team.played = parseInt(document.getElementById('editPlayed').value)||0;
+    team.won = parseInt(document.getElementById('editWon').value)||0;
+    team.lost = parseInt(document.getElementById('editLost').value)||0;
+    team.points = parseInt(document.getElementById('editPoints').value)||0;
+    team.nrr = document.getElementById('editNrr').value;
+    saveData();
+    alert("Team updated successfully!");
+  }
+}
+
+function addNewPlayer(){
+  const name = document.getElementById('newPlayerName').value;
+  if(!name){ alert("Enter player name"); return; }
+
+  const newP = {
+    name: name,
+    team: document.getElementById('newPlayerTeam').value,
+    role: document.getElementById('newPlayerRole').value || "Player",
+    matches: parseInt(document.getElementById('newPlayerMatches').value)||0,
+    runs: parseInt(document.getElementById('newPlayerRuns').value)||0,
+    highest: parseInt(document.getElementById('newPlayerHighest').value)||0,
+    average: document.getElementById('newPlayerAvg').value||"0.0",
+    strikeRate: document.getElementById('newPlayerSR').value||"0.0",
+    wickets: parseInt(document.getElementById('newPlayerWickets').value)||0,
+    economy: document.getElementById('newPlayerEco').value||"0.0"
+  };
+
+  players.push(newP);
+  saveData();
+  alert("Player added successfully!");
+  document.getElementById('newPlayerName').value = "";
+}
+
+function resetDefaultData(){
+  if(confirm("Are you sure you want to reset all website data to default?")){
+    localStorage.clear();
+    teams = [...defaultTeams];
+    fixtures = [...defaultFixtures];
+    players = [...defaultPlayers];
+    saveData();
+    closeModal('adminModal');
+  }
+}
+
+document.getElementById("playerSearch").addEventListener("input",renderPlayers);
+document.getElementById("teamFilter").addEventListener("change",renderPlayers);
+
+renderAll();
+</script>
+</body>
+</html>
