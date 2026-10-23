@@ -352,23 +352,23 @@ function generateDefaultSeasons(teamList){
   return obj;
 }
 
-const defaultFixtures = [
-  {id: 1, title:"Match 1", team1:"Team A", team2:"Team B", status:"Upcoming", result:"—"},
-  {id: 2, title:"Match 2", team1:"Team C", team2:"Team D", status:"Upcoming", result:"—"},
-  {id: 3, title:"Match 3", team1:"Team A", team2:"Team C", status:"Upcoming", result:"—"},
-  {id: 4, title:"Match 4", team1:"Team B", team2:"Team D", status:"Upcoming", result:"—"}
-];
+const defaultFixtures = [];
 
-const defaultPlayers = [
-  {id: 1, name:"Example Player 1", team:"Team A", role:"Batter", matches:4, runs:180, highest:65, average:"45.0", strikeRate:"140.2", wickets:0, economy:"0.0"},
-  {id: 2, name:"Example Player 2", team:"Team B", role:"Bowler", matches:3, runs:15, highest:10, average:"7.5", strikeRate:"80.0", wickets:6, economy:"6.8"}
-];
+const defaultPlayers = [];
 
-// LOCALSTORAGE SETUP
+// LOCALSTORAGE CLEANUP & SETUP
+let rawFixtures = localStorage.getItem('da_fixtures');
+let fixtures = [];
+try {
+  let parsed = JSON.parse(rawFixtures);
+  if(Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object' && parsed[0].title){
+    fixtures = parsed;
+  }
+} catch(e){}
+
 let siteConfig = JSON.parse(localStorage.getItem('da_site_config')) || defaultSiteConfig;
 let teamsList = JSON.parse(localStorage.getItem('da_teams_list')) || defaultTeamsList;
 let seasonsData = JSON.parse(localStorage.getItem('da_seasons_data')) || generateDefaultSeasons(teamsList);
-let fixtures = JSON.parse(localStorage.getItem('da_fixtures')) || defaultFixtures;
 let players = JSON.parse(localStorage.getItem('da_players')) || defaultPlayers;
 
 function saveData(){
@@ -412,9 +412,10 @@ function renderStandings(){
       <td>${t.won}</td><td>${t.lost}</td><td>${t.nrr}</td>
       <td class="gold">${t.points}</td></tr>`).join("");
 
-  document.getElementById("fixturesBody").innerHTML = fixtures
-    .map(f=>`<tr><td>${f.title}</td><td>${f.team1} vs ${f.team2}</td>
-      <td>${f.result}</td><td><span class="tag">${f.status}</span></td></tr>`).join("");
+  document.getElementById("fixturesBody").innerHTML = fixtures.length 
+    ? fixtures.map(f=>`<tr><td>${f.title}</td><td>${f.team1} vs ${f.team2}</td>
+        <td>${f.result}</td><td><span class="tag">${f.status}</span></td></tr>`).join("")
+    : `<tr><td colspan="4" style="text-align:center;color:var(--muted)">No fixtures added yet. Add matches from Admin Login.</td></tr>`;
 }
 
 function renderPlayers(){
@@ -722,8 +723,8 @@ function resetDefaultData(){
     siteConfig = {...defaultSiteConfig};
     teamsList = [...defaultTeamsList];
     seasonsData = generateDefaultSeasons(teamsList);
-    fixtures = [...defaultFixtures];
-    players = [...defaultPlayers];
+    fixtures = [];
+    players = [];
     saveData();
     closeModal('adminModal');
   }
