@@ -13,7 +13,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DA League | Season Hub & AI Super Admin</title>
+<title>DA League | Season Hub & AI Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -95,3 +95,66 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
 <body>
 
 <header>
+  <nav class="wrap">
+    <a class="brand" href="#home" id="siteLogo">DA <span>LEAGUE</span></a>
+    <div class="links">
+      <a href="#seasons">SEASONS</a>
+      <a href="#standings">STANDINGS</a>
+      <a href="#fixtures">FIXTURES</a>
+      <a href="#players">PLAYERS</a>
+      <a class="admin-nav-btn" onclick="openLoginModal()">ADMIN LOGIN</a>
+    </div>
+  </nav>
+</header>
+
+<main id="home">
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow" id="siteEyebrow">TOURNAMENT DASHBOARD</span>
+    <h1 id="heroTitle">THE GAME.<br><span class="gradient">THE GLORY.</span></h1>
+    <a class="btn primary" href="#standings">VIEW STANDINGS</a>
+    <a class="btn secondary" href="#players">PLAYER RECORDS</a>
+  </div>
+</section>
+
+<section id="seasons">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Tournament timeline</div>
+      <h2 id="seasonsHead">Explore Seasons</h2>
+      <p class="sub">Click a season card to switch standings view.</p>
+    </div>
+    <div class="season-grid">
+      <article class="season-card active" id="sc1" onclick="switchSeason(1)">
+        <div class="season-number">SEASON 01</div>
+        <h3>Season 1</h3>
+        <p>Season 1 standings & statistics.</p>
+        <span class="status" id="st1">● ACTIVE VIEW</span>
+      </article>
+      <article class="season-card" id="sc2" onclick="switchSeason(2)">
+        <div class="season-number">SEASON 02</div>
+        <h3>Season 2</h3>
+        <p>Season 2 standings & statistics.</p>
+        <span class="status soon" id="st2">◷ VIEW SEASON</span>
+      </article>
+      <article class="season-card" id="sc3" onclick="switchSeason(3)">
+        <div class="season-number">SEASON 03</div>
+        <h3>Season 3</h3>
+        <p>Season 3 standings & statistics.</p>
+        <span class="status soon" id="st3">◷ VIEW SEASON</span>
+      </article>
+      <article class="season-card" id="sc4" onclick="switchSeason(4)">
+        <div class="season-number">SEASON 04</div>
+        <h3>Season 4</h3>
+        <p>Season 4 standings & statistics.</p>
+        <span class="status soon" id="st4">◷ VIEW SEASON</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="standings">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">League overview</div>
+      <h2 id="standingsTitle">Points Table — Season
