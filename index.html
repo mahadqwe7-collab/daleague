@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DA League | Season Hub & AI Admin</title>
+<title>DA League | Season Hub & AI Super Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -67,12 +67,12 @@ input,select{background:#0a1726;color:white;border:1px solid var(--line);border-
 
 /* Modal & Chat Styling */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:100}
-.modal{background:#102238;border:1px solid var(--line);border-radius:16px;padding:25px;width:min(650px,95%);max-height:88vh;overflow-y:auto}
+.modal{background:#102238;border:1px solid var(--line);border-radius:16px;padding:25px;width:min(680px,95%);max-height:88vh;overflow-y:auto}
 .admin-section{margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:15px}
 .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .form-group label{font-size:11px;color:var(--muted)}
 
-.chat-box{background:#07111f;border:1px solid var(--line);border-radius:10px;padding:12px;height:160px;overflow-y:auto;margin-bottom:10px;font-size:12px;display:flex;flex-direction:column;gap:6px;}
+.chat-box{background:#07111f;border:1px solid var(--line);border-radius:10px;padding:12px;height:200px;overflow-y:auto;margin-bottom:10px;font-size:12px;display:flex;flex-direction:column;gap:6px;}
 .chat-msg{padding:8px 12px;border-radius:8px;max-width:85%;line-height:1.4;}
 .chat-ai{background:#11243a;color:var(--text);align-self:flex-start;}
 .chat-user{background:var(--gold);color:#111827;align-self:flex-end;}
@@ -211,29 +211,37 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
 <!-- ADMIN PANEL MODAL -->
 <div id="adminModal" class="modal-overlay">
   <div class="modal">
-    <h2>Admin AI Command Center</h2>
+    <h2>🤖 AI Super Admin Command Center</h2>
 
     <!-- AI CHAT ASSISTANT -->
     <div class="admin-section" style="background:#0a1726;padding:15px;border-radius:12px;border:1px solid var(--gold);">
-      <h3 style="color:var(--gold)">🤖 AI Admin Assistant Chat</h3>
-      <p class="sub" style="margin-bottom:8px;">Type anything to update website (e.g. <i>"Add team Falcons"</i>, <i>"Team A beat Team B"</i>, <i>"Add player Ali to Team A as Batter with 120 runs"</i>)</p>
+      <h3 style="color:var(--gold)">AI Assistant Control Hub</h3>
+      <p class="sub" style="margin-bottom:8px;">
+        Examples:<br>
+        • <i>"reset data"</i><br>
+        • <i>"add team Falcons"</i><br>
+        • <i>"delete team Team B"</i><br>
+        • <i>"rename team Team A to Warriors"</i><br>
+        • <i>"Team A beat Team B"</i><br>
+        • <i>"add player Ali to Team A as Batter with 80 runs"</i><br>
+        • <i>"delete player Ali"</i>
+      </p>
       
       <div class="chat-box" id="aiChatBox">
-        <div class="chat-msg chat-ai">Hello Admin! Type a command or match summary and I will update the website instantly.</div>
+        <div class="chat-msg chat-ai">Hello Mahad! I have full control over the website. Tell me what to update!</div>
       </div>
 
       <div style="display:flex;gap:8px;">
-        <input type="text" id="aiUserPrompt" placeholder="Type command here..." style="flex:1;" onkeypress="if(event.key==='Enter') sendAIChatCommand()">
+        <input type="text" id="aiUserPrompt" placeholder="Type any command here..." style="flex:1;" onkeypress="if(event.key==='Enter') sendAIChatCommand()">
         <button class="btn primary" style="margin:0;" onclick="sendAIChatCommand()">Send</button>
       </div>
     </div>
 
-    <!-- MANUAL CONTROLS -->
+    <!-- MANUAL BACKUP CONTROLS -->
     <div class="admin-section">
-      <h3>Manual Control Panel</h3>
+      <h3>Manual Backup Controls</h3>
       <div class="form-group"><label>Eyebrow Tagline</label><input type="text" id="editEyebrow"></div>
-      <div class="form-group"><label>Hero Main Heading</label><input type="text" id="editHeroHeading"></div>
-      <button class="btn primary" onclick="saveSiteText()">Save Text Changes</button>
+      <button class="btn primary" onclick="saveSiteText()">Save Tagline</button>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
@@ -354,7 +362,7 @@ function populateDropdowns(){
   document.getElementById("teamFilter").innerHTML = `<option value="All">All teams</option>` + teamOptions;
 }
 
-// ADMIN FUNCTIONS
+// ADMIN AUTH & MODAL
 function openLoginModal(){ document.getElementById('loginModal').style.display='flex'; }
 function closeModal(id){ document.getElementById('loginModal').style.display='none'; document.getElementById('adminModal').style.display='none'; }
 
@@ -364,7 +372,6 @@ function verifyPassword(){
     closeModal('loginModal');
     document.getElementById('adminModal').style.display='flex';
     document.getElementById('editEyebrow').value = siteConfig.eyebrow;
-    document.getElementById('editHeroHeading').value = siteConfig.heroHeading;
   } else {
     alert("Incorrect Password!");
   }
@@ -372,12 +379,11 @@ function verifyPassword(){
 
 function saveSiteText(){
   siteConfig.eyebrow = document.getElementById('editEyebrow').value;
-  siteConfig.heroHeading = document.getElementById('editHeroHeading').value;
   saveData();
-  alert("Website headings updated!");
+  alert("Tagline updated!");
 }
 
-/* AI CHAT COMMAND PROCESSOR */
+/* 🤖 FULL ACCESS AI COMMAND PROCESSOR */
 function sendAIChatCommand(){
   const inputField = document.getElementById('aiUserPrompt');
   const text = inputField.value.trim();
@@ -388,33 +394,89 @@ function sendAIChatCommand(){
   inputField.value = "";
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  let aiResponse = "I couldn't understand that command. Try something like 'Add team Falcons', 'Team A beat Team B', or 'Add player Ali to Team A as Batter with 50 runs'.";
-
+  let aiResponse = "";
   const lower = text.toLowerCase();
 
-  // COMMAND 1: Add Team
-  if(lower.startsWith("add team") || lower.includes("new team")){
-    const parts = text.split(" ");
-    const teamName = parts[parts.length - 1];
-    if(teamName && !teamsList.includes(teamName)){
-      teamsList.push(teamName);
-      for(let s in seasonsData){
-        seasonsData[s].push({name: teamName, played:0, won:0, lost:0, nrr:"0.000", points:0});
-      }
+  // 1. RESET DATA COMMAND
+  if(lower.includes("reset") || lower.includes("clear") || lower.includes("delete all")){
+    if(confirm("AI: Are you sure you want to reset all website data?")){
+      localStorage.clear();
+      siteConfig = {...defaultSiteConfig};
+      teamsList = [...defaultTeamsList];
+      seasonsData = generateDefaultSeasons(teamsList);
+      fixtures = [];
+      players = [];
       saveData();
-      aiResponse = `Success! Team '${teamName}' has been added to the league.`;
+      aiResponse = "🔄 Website data completely reset to defaults!";
     } else {
-      aiResponse = "Team already exists or name was invalid.";
+      aiResponse = "Reset cancelled.";
     }
   }
 
-  // COMMAND 2: Match Summary / Win result
-  else if(lower.includes("beat") || lower.includes("defeated") || lower.includes("won against")){
+  // 2. ADD TEAM COMMAND
+  else if(lower.startsWith("add team")){
+    const tName = text.substring(9).trim();
+    if(tName && !teamsList.includes(tName)){
+      teamsList.push(tName);
+      for(let s in seasonsData){
+        seasonsData[s].push({name: tName, played:0, won:0, lost:0, nrr:"0.000", points:0});
+      }
+      saveData();
+      aiResponse = `✅ Team '${tName}' added successfully!`;
+    } else {
+      aiResponse = "❌ Team already exists or name invalid.";
+    }
+  }
+
+  // 3. DELETE TEAM COMMAND
+  else if(lower.startsWith("delete team")){
+    const tName = text.substring(11).trim();
+    if(teamsList.includes(tName)){
+      teamsList = teamsList.filter(t => t.toLowerCase() !== tName.toLowerCase());
+      for(let s in seasonsData){
+        seasonsData[s] = seasonsData[s].filter(t => t.name.toLowerCase() !== tName.toLowerCase());
+      }
+      saveData();
+      aiResponse = `🗑️ Team '${tName}' deleted successfully!`;
+    } else {
+      aiResponse = "❌ Team not found.";
+    }
+  }
+
+  // 4. RENAME TEAM COMMAND ("rename team Old to New")
+  else if(lower.includes("rename team")){
+    const parts = text.replace(/rename team/i, "").split("to");
+    if(parts.length === 2){
+      const oldName = parts[0].trim();
+      const newName = parts[1].trim();
+      const idx = teamsList.findIndex(t => t.toLowerCase() === oldName.toLowerCase());
+      if(idx !== -1){
+        teamsList[idx] = newName;
+        for(let s in seasonsData){
+          seasonsData[s].forEach(t => { if(t.name.toLowerCase() === oldName.toLowerCase()) t.name = newName; });
+        }
+        players.forEach(p => { if(p.team.toLowerCase() === oldName.toLowerCase()) p.team = newName; });
+        fixtures.forEach(f => {
+          if(f.team1.toLowerCase() === oldName.toLowerCase()) f.team1 = newName;
+          if(f.team2.toLowerCase() === oldName.toLowerCase()) f.team2 = newName;
+        });
+        saveData();
+        aiResponse = `✏️ Team renamed from '${oldName}' to '${newName}'!`;
+      } else {
+        aiResponse = "❌ Old team name not found.";
+      }
+    } else {
+      aiResponse = "Format: 'rename team [Old] to [New]'";
+    }
+  }
+
+  // 5. MATCH RESULT COMMAND ("Team A beat Team B")
+  else if(lower.includes("beat") || lower.includes("defeated")){
     let updated = false;
     let currentTeams = seasonsData[activeSeason];
     teamsList.forEach(t1 => {
       teamsList.forEach(t2 => {
-        if(t1 !== t2 && lower.includes(t1.toLowerCase()) && (lower.includes("beat") || lower.includes("defeated")) && lower.includes(t2.toLowerCase())){
+        if(t1 !== t2 && lower.includes(t1.toLowerCase()) && lower.includes(t2.toLowerCase())){
           let winner = currentTeams.find(t => t.name.toLowerCase() === t1.toLowerCase());
           let loser = currentTeams.find(t => t.name.toLowerCase() === t2.toLowerCase());
           if(winner && loser){
@@ -422,60 +484,63 @@ function sendAIChatCommand(){
             loser.played += 1; loser.lost += 1;
             fixtures.push({ id: Date.now(), title: `Match`, team1: winner.name, team2: loser.name, status: "Completed", result: `${winner.name} won` });
             saveData();
-            aiResponse = `Match recorded! ${winner.name} defeated ${loser.name}. Standings & Fixtures updated!`;
+            aiResponse = `🏆 Match recorded! ${winner.name} defeated ${loser.name}. Points table & fixtures updated!`;
             updated = true;
           }
         }
       });
     });
     if(!updated){
-      aiResponse = "Could not identify team names from your sentence. Make sure team names match exactly.";
+      aiResponse = "❌ Could not detect team names. Make sure exact team names are mentioned.";
     }
   }
 
-  // COMMAND 3: Add / Update Player
-  else if(lower.includes("player") || lower.includes("scored") || lower.includes("runs")){
-    // Simple regex extraction or keyword check
-    let playerName = "Player";
-    let teamName = teamsList[0];
-    let role = "Batter";
-    let runs = 0;
-
-    teamsList.forEach(t => {
-      if(lower.includes(t.toLowerCase())) teamName = t;
-    });
-
+  // 6. ADD PLAYER COMMAND ("add player Ali to Team A as Batter with 50 runs")
+  else if(lower.startsWith("add player")){
+    // Simple parser
+    const nameMatch = text.match(/add player\s+([a-zA-Z0-9\s]+?)\s+to/i);
+    const teamMatch = text.match(/to\s+([a-zA-Z0-9\s]+?)\s+as/i) || text.match(/to\s+([a-zA-Z0-9\s]+?)\s+with/i);
+    const roleMatch = text.match(/as\s+(Batter|Bowler)/i);
     const runMatch = text.match(/(\d+)\s*runs/i);
-    if(runMatch) runs = parseInt(runMatch[1]);
 
-    // Extract name (assume words after 'player')
-    const words = text.split(" ");
-    let pIdx = words.findIndex(w => w.toLowerCase() === "player");
-    if(pIdx !== -1 && words[pIdx+1]) playerName = words[pIdx+1];
+    const pName = nameMatch ? nameMatch[1].trim() : "New Player";
+    const tName = teamMatch ? teamMatch[1].trim() : teamsList[0];
+    const role = roleMatch ? roleMatch[1] : "Batter";
+    const runs = runMatch ? parseInt(runMatch[1]) : 0;
 
-    let existing = players.find(p => p.name.toLowerCase() === playerName.toLowerCase());
-    if(existing){
-      existing.runs += runs;
-      existing.matches += 1;
-      if(runs > existing.highest) existing.highest = runs;
-      aiResponse = `Updated player ${existing.name}: Added ${runs} runs!`;
-    } else {
-      players.push({
-        id: Date.now(),
-        name: playerName,
-        team: teamName,
-        role: "Batter",
-        matches: 1,
-        runs: runs,
-        highest: runs,
-        average: runs.toString(),
-        strikeRate: "120.0",
-        wickets: 0,
-        economy: "0.0"
-      });
-      aiResponse = `New player ${playerName} added to ${teamName} with ${runs} runs!`;
-    }
+    players.push({
+      id: Date.now(),
+      name: pName,
+      team: tName,
+      role: role,
+      matches: 1,
+      runs: runs,
+      highest: runs,
+      average: runs.toString(),
+      strikeRate: "125.0",
+      wickets: 0,
+      economy: "0.0"
+    });
     saveData();
+    aiResponse = `👤 Player '${pName}' added to ${tName} as ${role} with ${runs} runs!`;
+  }
+
+  // 7. DELETE PLAYER COMMAND ("delete player Ali")
+  else if(lower.startsWith("delete player")){
+    const pName = text.substring(13).trim();
+    const initialLen = players.length;
+    players = players.filter(p => p.name.toLowerCase() !== pName.toLowerCase());
+    if(players.length < initialLen){
+      saveData();
+      aiResponse = `🗑️ Player '${pName}' deleted successfully!`;
+    } else {
+      aiResponse = `❌ Player '${pName}' not found.`;
+    }
+  }
+
+  // DEFAULT FALLBACK
+  else {
+    aiResponse = "🤖 Command not recognized. Try: 'add team X', 'delete team X', 'Team A beat Team B', 'add player Ali to Team A as Batter with 50 runs', or 'reset data'.";
   }
 
   setTimeout(() => {
