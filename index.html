@@ -12,7 +12,11 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DA League | Season Hub & AI Admin</title>
+<title>DA League 20s | Official Cricket Tournament</title>
+<meta name="description" content="DA League 20s official tournament dashboard, points table, player stats, and fixtures.">
+<meta name="keywords" content="DA League, daleague20s, DA League 20s, cricket tournament, points table">
+<meta name="robots" content="index, follow">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -72,16 +76,16 @@ tr:last-child td{border-bottom:0}
 .metric span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}
 .metric strong{display:block;font-size:16px;margin-top:5px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
-input,select{background:#0a1726;color:white;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;font-size:12px;width:100%}
+input,select,textarea{background:#0a1726;color:white;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;font-size:12px;width:100%}
 
 /* Modal & Chat Styling */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:100}
-.modal{background:#102238;border:1px solid var(--line);border-radius:16px;padding:25px;width:min(680px,95%);max-height:88vh;overflow-y:auto}
+.modal{background:#102238;border:1px solid var(--line);border-radius:16px;padding:25px;width:min(700px,95%);max-height:88vh;overflow-y:auto}
 .admin-section{margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:15px}
 .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .form-group label{font-size:11px;color:var(--muted)}
 
-.chat-box{background:#07111f;border:1px solid var(--line);border-radius:10px;padding:12px;height:200px;overflow-y:auto;margin-bottom:10px;font-size:12px;display:flex;flex-direction:column;gap:6px;}
+.chat-box{background:#07111f;border:1px solid var(--line);border-radius:10px;padding:12px;height:160px;overflow-y:auto;margin-bottom:10px;font-size:12px;display:flex;flex-direction:column;gap:6px;}
 .chat-msg{padding:8px 12px;border-radius:8px;max-width:85%;line-height:1.4;}
 .chat-ai{background:#11243a;color:var(--text);align-self:flex-start;}
 .chat-user{background:var(--gold);color:#111827;align-self:flex-end;}
@@ -115,6 +119,9 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
     <a class="btn secondary" href="#players">PLAYER RECORDS</a>
   </div>
 </section>
+
+<!-- DYNAMIC CUSTOM HTML INJECTOR CONTAINER -->
+<div id="customHtmlContainer" class="wrap" style="margin-top: 20px;"></div>
 
 <section id="seasons">
   <div class="wrap">
@@ -220,24 +227,17 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
 <!-- ADMIN PANEL MODAL -->
 <div id="adminModal" class="modal-overlay">
   <div class="modal">
-    <h2>🤖 AI Super Admin Command Center</h2>
+    <h2>🤖 AI Super Admin & Code Hub</h2>
 
-    <!-- AI CHAT ASSISTANT -->
+    <!-- 1. AI CHAT ASSISTANT -->
     <div class="admin-section" style="background:#0a1726;padding:15px;border-radius:12px;border:1px solid var(--gold);">
       <h3 style="color:var(--gold)">AI Assistant Control Hub</h3>
       <p class="sub" style="margin-bottom:8px;">
-        Examples:<br>
-        • <i>"reset data"</i><br>
-        • <i>"add team Falcons"</i><br>
-        • <i>"delete team Team B"</i><br>
-        • <i>"rename team Team A to Warriors"</i><br>
-        • <i>"Team A beat Team B"</i><br>
-        • <i>"add player Ali to Team A as Batter with 80 runs"</i><br>
-        • <i>"delete player Ali"</i>
+        Commands: <i>"reset data"</i>, <i>"add team Falcons"</i>, <i>"Team A beat Team B"</i>, <i>"add player Ali to Team A as Batter with 50 runs"</i>
       </p>
       
       <div class="chat-box" id="aiChatBox">
-        <div class="chat-msg chat-ai">Hello Mahad! I have full control over the website. Tell me what to update!</div>
+        <div class="chat-msg chat-ai">Hello Mahad! Type any command or use the HTML editor below.</div>
       </div>
 
       <div style="display:flex;gap:8px;">
@@ -246,9 +246,20 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
       </div>
     </div>
 
+    <!-- 2. DIRECT HTML CODE INJECTOR OPTION -->
+    <div class="admin-section">
+      <h3 style="color: var(--teal);">🌐 Custom HTML Code Injector</h3>
+      <p class="sub">Yahan apna koi bhi HTML code paste karein aur 'Save & Apply HTML' par click karein. Yeh baghair GitHub ke direct website par show ho jayega!</p>
+      <div class="form-group">
+        <label>Paste HTML Code Here:</label>
+        <textarea id="customHtmlInput" rows="5" placeholder="<div>Your custom HTML here...</div>"></textarea>
+      </div>
+      <button class="btn primary" onclick="saveCustomHtmlCode()">Save & Apply HTML</button>
+    </div>
+
     <!-- MANUAL BACKUP CONTROLS -->
     <div class="admin-section">
-      <h3>Manual Backup Controls</h3>
+      <h3>Manual Tagline Settings</h3>
       <div class="form-group"><label>Eyebrow Tagline</label><input type="text" id="editEyebrow"></div>
       <button class="btn primary" onclick="saveSiteText()">Save Tagline</button>
     </div>
@@ -292,22 +303,15 @@ let teamsList = defaultTeamsList;
 let seasonsData = generateDefaultSeasons(teamsList);
 let fixtures = defaultFixtures;
 let players = defaultPlayers;
+let customHtml = "";
 
 try {
-  const loadedConfig = localStorage.getItem('da_site_config');
-  if (loadedConfig) siteConfig = JSON.parse(loadedConfig);
-
-  const loadedTeams = localStorage.getItem('da_teams_list');
-  if (loadedTeams) teamsList = JSON.parse(loadedTeams);
-
-  const loadedSeasons = localStorage.getItem('da_seasons_data');
-  if (loadedSeasons) seasonsData = JSON.parse(loadedSeasons);
-
-  const loadedFixtures = localStorage.getItem('da_fixtures');
-  if (loadedFixtures) fixtures = JSON.parse(loadedFixtures);
-
-  const loadedPlayers = localStorage.getItem('da_players');
-  if (loadedPlayers) players = JSON.parse(loadedPlayers);
+  if (localStorage.getItem('da_site_config')) siteConfig = JSON.parse(localStorage.getItem('da_site_config'));
+  if (localStorage.getItem('da_teams_list')) teamsList = JSON.parse(localStorage.getItem('da_teams_list'));
+  if (localStorage.getItem('da_seasons_data')) seasonsData = JSON.parse(localStorage.getItem('da_seasons_data'));
+  if (localStorage.getItem('da_fixtures')) fixtures = JSON.parse(localStorage.getItem('da_fixtures'));
+  if (localStorage.getItem('da_players')) players = JSON.parse(localStorage.getItem('da_players'));
+  if (localStorage.getItem('da_custom_html')) customHtml = localStorage.getItem('da_custom_html');
 } catch(e) {
   console.error("Local storage error", e);
 }
@@ -319,6 +323,14 @@ function saveData(){
   localStorage.setItem('da_fixtures', JSON.stringify(fixtures));
   localStorage.setItem('da_players', JSON.stringify(players));
   renderAll();
+}
+
+function saveCustomHtmlCode(){
+  const htmlVal = document.getElementById('customHtmlInput').value;
+  customHtml = htmlVal;
+  localStorage.setItem('da_custom_html', customHtml);
+  document.getElementById('customHtmlContainer').innerHTML = customHtml;
+  alert("Custom HTML code successfully saved and applied to website!");
 }
 
 function switchSeason(sNum){
@@ -351,6 +363,9 @@ function renderAll(){
   const heroEl = document.getElementById("heroTitle");
   if(heroEl) heroEl.innerHTML = siteConfig.heroHeading || 'THE GAME.<br><span class="gradient">THE GLORY.</span>';
   
+  const htmlContainer = document.getElementById("customHtmlContainer");
+  if(htmlContainer && customHtml) htmlContainer.innerHTML = customHtml;
+
   renderStandings();
   renderPlayers();
   populateDropdowns();
@@ -429,6 +444,7 @@ function verifyPassword(){
     closeModal('loginModal');
     document.getElementById('adminModal').style.display='flex';
     document.getElementById('editEyebrow').value = siteConfig.eyebrow || "";
+    document.getElementById('customHtmlInput').value = customHtml || "";
   } else {
     alert("Incorrect Password!");
   }
@@ -463,6 +479,7 @@ function sendAIChatCommand(){
       seasonsData = generateDefaultSeasons(teamsList);
       fixtures = [];
       players = [];
+      customHtml = "";
       saveData();
       aiResponse = "🔄 Website data completely reset to defaults!";
     } else {
@@ -492,30 +509,6 @@ function sendAIChatCommand(){
     } else {
       aiResponse = "❌ Team not found.";
     }
-  } else if(lower.includes("rename team")){
-    const parts = text.replace(/rename team/i, "").split("to");
-    if(parts.length === 2){
-      const oldName = parts[0].trim();
-      const newName = parts[1].trim();
-      const idx = teamsList.findIndex(t => t.toLowerCase() === oldName.toLowerCase());
-      if(idx !== -1){
-        teamsList[idx] = newName;
-        for(let s in seasonsData){
-          seasonsData[s].forEach(t => { if(t.name.toLowerCase() === oldName.toLowerCase()) t.name = newName; });
-        }
-        players.forEach(p => { if(p.team.toLowerCase() === oldName.toLowerCase()) p.team = newName; });
-        fixtures.forEach(f => {
-          if(f.team1.toLowerCase() === oldName.toLowerCase()) f.team1 = newName;
-          if(f.team2.toLowerCase() === oldName.toLowerCase()) f.team2 = newName;
-        });
-        saveData();
-        aiResponse = `✏️ Team renamed from '${oldName}' to '${newName}'!`;
-      } else {
-        aiResponse = "❌ Old team name not found.";
-      }
-    } else {
-      aiResponse = "Format: 'rename team [Old] to [New]'";
-    }
   } else if(lower.includes("beat") || lower.includes("defeated")){
     let updated = false;
     let currentTeams = seasonsData[activeSeason];
@@ -529,14 +522,14 @@ function sendAIChatCommand(){
             loser.played += 1; loser.lost += 1;
             fixtures.push({ id: Date.now(), title: `Match`, team1: winner.name, team2: loser.name, status: "Completed", result: `${winner.name} won` });
             saveData();
-            aiResponse = `🏆 Match recorded! ${winner.name} defeated ${loser.name}. Points table & fixtures updated!`;
+            aiResponse = `🏆 Match recorded! ${winner.name} defeated ${loser.name}. Points table updated!`;
             updated = true;
           }
         }
       });
     });
     if(!updated){
-      aiResponse = "❌ Could not detect team names. Make sure exact team names are mentioned.";
+      aiResponse = "❌ Could not detect team names.";
     }
   } else if(lower.startsWith("add player")){
     const nameMatch = text.match(/add player\s+([a-zA-Z0-9\s]+?)\s+to/i);
@@ -563,19 +556,9 @@ function sendAIChatCommand(){
       economy: "0.0"
     });
     saveData();
-    aiResponse = `👤 Player '${pName}' added to ${tName} as ${role} with ${runs} runs!`;
-  } else if(lower.startsWith("delete player")){
-    const pName = text.substring(13).trim();
-    const initialLen = players.length;
-    players = players.filter(p => p.name.toLowerCase() !== pName.toLowerCase());
-    if(players.length < initialLen){
-      saveData();
-      aiResponse = `🗑️ Player '${pName}' deleted successfully!`;
-    } else {
-      aiResponse = `❌ Player '${pName}' not found.`;
-    }
+    aiResponse = `👤 Player '${pName}' added to ${tName} with ${runs} runs!`;
   } else {
-    aiResponse = "🤖 Command not recognized. Try: 'add team X', 'delete team X', 'Team A beat Team B', 'add player Ali to Team A as Batter with 50 runs', or 'reset data'.";
+    aiResponse = "🤖 Command not recognized.";
   }
 
   setTimeout(() => {
@@ -585,13 +568,14 @@ function sendAIChatCommand(){
 }
 
 function resetDefaultData(){
-  if(confirm("Are you sure you want to reset all website data to defaults?")){
+  if(confirm("Are you sure you want to reset all website data?")){
     localStorage.clear();
     siteConfig = defaultSiteConfig;
     teamsList = defaultTeamsList;
     seasonsData = generateDefaultSeasons(teamsList);
     fixtures = [];
     players = [];
+    customHtml = "";
     saveData();
     closeModal('adminModal');
   }
