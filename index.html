@@ -7,7 +7,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-HDWC2CSM36');
 </script>
 
@@ -157,4 +156,456 @@ footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">League overview</div>
-      <h2 id="standingsTitle">Points Table — Season
+      <h2 id="standingsTitle">Points Table — Season 1</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Pos</th><th>Team</th><th>Played</th><th>Won</th><th>Lost</th><th>NRR</th><th>Points</th></tr></thead>
+        <tbody id="pointsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="fixtures">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Match centre</div>
+      <h2>Fixtures</h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Match</th><th>Fixture</th><th>Result</th><th>Status</th></tr></thead>
+        <tbody id="fixturesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="players">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Performance centre</div>
+      <h2>Player Records</h2>
+    </div>
+    <div class="toolbar">
+      <input id="playerSearch" type="search" placeholder="Search player or team..." style="max-width:250px;">
+      <select id="teamFilter" style="max-width:200px;">
+        <option value="All">All teams</option>
+      </select>
+      <select id="roleFilter" style="max-width:180px;">
+        <option value="All">All Roles</option>
+        <option value="Batter">Batter</option>
+        <option value="Bowler">Bowler</option>
+      </select>
+    </div>
+    <div class="player-grid" id="playerGrid"></div>
+  </div>
+</section>
+</main>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <div class="form-group">
+      <label>Enter Password</label>
+      <input type="password" id="adminPassword" placeholder="Password">
+    </div>
+    <button class="btn primary" onclick="verifyPassword()">Login</button>
+    <button class="btn secondary" onclick="closeModal('loginModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL MODAL -->
+<div id="adminModal" class="modal-overlay">
+  <div class="modal">
+    <h2>🤖 AI Super Admin Command Center</h2>
+
+    <!-- AI CHAT ASSISTANT -->
+    <div class="admin-section" style="background:#0a1726;padding:15px;border-radius:12px;border:1px solid var(--gold);">
+      <h3 style="color:var(--gold)">AI Assistant Control Hub</h3>
+      <p class="sub" style="margin-bottom:8px;">
+        Examples:<br>
+        • <i>"reset data"</i><br>
+        • <i>"add team Falcons"</i><br>
+        • <i>"delete team Team B"</i><br>
+        • <i>"rename team Team A to Warriors"</i><br>
+        • <i>"Team A beat Team B"</i><br>
+        • <i>"add player Ali to Team A as Batter with 80 runs"</i><br>
+        • <i>"delete player Ali"</i>
+      </p>
+      
+      <div class="chat-box" id="aiChatBox">
+        <div class="chat-msg chat-ai">Hello Mahad! I have full control over the website. Tell me what to update!</div>
+      </div>
+
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="aiUserPrompt" placeholder="Type any command here..." style="flex:1;" onkeypress="if(event.key==='Enter') sendAIChatCommand()">
+        <button class="btn primary" style="margin:0;" onclick="sendAIChatCommand()">Send</button>
+      </div>
+    </div>
+
+    <!-- MANUAL BACKUP CONTROLS -->
+    <div class="admin-section">
+      <h3>Manual Backup Controls</h3>
+      <div class="form-group"><label>Eyebrow Tagline</label><input type="text" id="editEyebrow"></div>
+      <button class="btn primary" onclick="saveSiteText()">Save Tagline</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;">
+      <button class="btn secondary" onclick="closeModal('adminModal')">Close Dashboard</button>
+      <button class="btn danger" onclick="resetDefaultData()">Reset All Data</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">DA LEAGUE · SEASON HUB</div>
+</footer>
+
+<script>
+let activeSeason = 1;
+
+const defaultSiteConfig = {
+  eyebrow: "TOURNAMENT DASHBOARD",
+  heroHeading: "THE GAME.<br>THE GLORY."
+};
+
+const defaultTeamsList = ["Team A", "Team B", "Team C", "Team D"];
+
+function generateDefaultSeasons(teamList){
+  const obj = {};
+  for(let i=1; i<=4; i++){
+    obj[i] = teamList.map(tName => ({
+      name: tName, played:0, won:0, lost:0, nrr:"0.000", points:0
+    }));
+  }
+  return obj;
+}
+
+const defaultFixtures = [];
+const defaultPlayers = [];
+
+let siteConfig = defaultSiteConfig;
+let teamsList = defaultTeamsList;
+let seasonsData = generateDefaultSeasons(teamsList);
+let fixtures = defaultFixtures;
+let players = defaultPlayers;
+
+try {
+  const loadedConfig = localStorage.getItem('da_site_config');
+  if (loadedConfig) siteConfig = JSON.parse(loadedConfig);
+
+  const loadedTeams = localStorage.getItem('da_teams_list');
+  if (loadedTeams) teamsList = JSON.parse(loadedTeams);
+
+  const loadedSeasons = localStorage.getItem('da_seasons_data');
+  if (loadedSeasons) seasonsData = JSON.parse(loadedSeasons);
+
+  const loadedFixtures = localStorage.getItem('da_fixtures');
+  if (loadedFixtures) fixtures = JSON.parse(loadedFixtures);
+
+  const loadedPlayers = localStorage.getItem('da_players');
+  if (loadedPlayers) players = JSON.parse(loadedPlayers);
+} catch(e) {
+  console.error("Local storage error", e);
+}
+
+function saveData(){
+  localStorage.setItem('da_site_config', JSON.stringify(siteConfig));
+  localStorage.setItem('da_teams_list', JSON.stringify(teamsList));
+  localStorage.setItem('da_seasons_data', JSON.stringify(seasonsData));
+  localStorage.setItem('da_fixtures', JSON.stringify(fixtures));
+  localStorage.setItem('da_players', JSON.stringify(players));
+  renderAll();
+}
+
+function switchSeason(sNum){
+  activeSeason = sNum;
+  for(let i=1; i<=4; i++){
+    const sc = document.getElementById(`sc${i}`);
+    const st = document.getElementById(`st${i}`);
+    if(sc) sc.classList.remove("active");
+    if(st) {
+      st.className = "status soon";
+      st.innerText = "◷ VIEW SEASON";
+    }
+  }
+  const activeSc = document.getElementById(`sc${sNum}`);
+  const activeSt = document.getElementById(`st${sNum}`);
+  if(activeSc) activeSc.classList.add("active");
+  if(activeSt) {
+    activeSt.className = "status";
+    activeSt.innerText = "● ACTIVE VIEW";
+  }
+  const titleEl = document.getElementById("standingsTitle");
+  if(titleEl) titleEl.innerText = `Points Table — Season ${sNum}`;
+  renderStandings();
+}
+
+function renderAll(){
+  const eyebrowEl = document.getElementById("siteEyebrow");
+  if(eyebrowEl) eyebrowEl.innerText = siteConfig.eyebrow || "TOURNAMENT DASHBOARD";
+  
+  const heroEl = document.getElementById("heroTitle");
+  if(heroEl) heroEl.innerHTML = siteConfig.heroHeading || 'THE GAME.<br><span class="gradient">THE GLORY.</span>';
+  
+  renderStandings();
+  renderPlayers();
+  populateDropdowns();
+}
+
+function renderStandings(){
+  const currentTeams = seasonsData[activeSeason] || [];
+  const pointsBody = document.getElementById("pointsBody");
+  if(pointsBody){
+    pointsBody.innerHTML = currentTeams.length
+      ? [...currentTeams]
+        .sort((a,b)=>b.points-a.points)
+        .map((t,i)=>`<tr>
+          <td>${i+1}</td><td>${t.name}</td><td>${t.played}</td>
+          <td>${t.won}</td><td>${t.lost}</td><td>${t.nrr}</td>
+          <td class="gold">${t.points}</td></tr>`).join("")
+      : `<tr><td colspan="7" style="text-align:center;color:var(--muted)">No teams available.</td></tr>`;
+  }
+
+  const fixturesBody = document.getElementById("fixturesBody");
+  if(fixturesBody){
+    fixturesBody.innerHTML = fixtures.length 
+      ? fixtures.map(f=>`<tr><td>${f.title}</td><td>${f.team1} vs ${f.team2}</td>
+          <td>${f.result}</td><td><span class="tag">${f.status}</span></td></tr>`).join("")
+      : `<tr><td colspan="4" style="text-align:center;color:var(--muted)">No fixtures added yet.</td></tr>`;
+  }
+}
+
+function renderPlayers(){
+  const searchEl = document.getElementById("playerSearch");
+  const teamEl = document.getElementById("teamFilter");
+  const roleEl = document.getElementById("roleFilter");
+  
+  const query = searchEl ? searchEl.value.toLowerCase() : "";
+  const team = teamEl ? teamEl.value : "All";
+  const role = roleEl ? roleEl.value : "All";
+
+  const filtered = players.filter(p =>
+    (p.name+" "+p.team+" "+p.role).toLowerCase().includes(query) &&
+    (team==="All" || p.team===team) &&
+    (role==="All" || p.role===role)
+  );
+
+  const playerGrid = document.getElementById("playerGrid");
+  if(playerGrid){
+    playerGrid.innerHTML = filtered.length
+      ? filtered.map(p=>`<article class="player-card">
+        <div class="player-name">${p.name}</div>
+        <div class="player-meta">${p.team} · ${p.role}</div>
+        <div class="metrics">
+          <div class="metric"><span>Matches</span><strong>${p.matches}</strong></div>
+          <div class="metric"><span>Runs</span><strong>${p.runs}</strong></div>
+          <div class="metric"><span>Highest</span><strong>${p.highest}</strong></div>
+          <div class="metric"><span>Average</span><strong>${p.average}</strong></div>
+          <div class="metric"><span>SR</span><strong>${p.strikeRate}</strong></div>
+          <div class="metric"><span>Wickets</span><strong>${p.wickets}</strong></div>
+          <div class="metric"><span>Economy</span><strong>${p.economy}</strong></div>
+        </div></article>`).join("")
+      : '<div class="player-card">No players found.</div>';
+  }
+}
+
+function populateDropdowns(){
+  const teamOptions = teamsList.map(t=>`<option value="${t}">${t}</option>`).join("");
+  const teamFilterEl = document.getElementById("teamFilter");
+  if(teamFilterEl) teamFilterEl.innerHTML = `<option value="All">All teams</option>` + teamOptions;
+}
+
+// ADMIN AUTH & MODAL
+function openLoginModal(){ document.getElementById('loginModal').style.display='flex'; }
+function closeModal(id){ document.getElementById('loginModal').style.display='none'; document.getElementById('adminModal').style.display='none'; }
+
+function verifyPassword(){
+  const pass = document.getElementById('adminPassword').value;
+  if(pass === "mahadmahad"){
+    closeModal('loginModal');
+    document.getElementById('adminModal').style.display='flex';
+    document.getElementById('editEyebrow').value = siteConfig.eyebrow || "";
+  } else {
+    alert("Incorrect Password!");
+  }
+}
+
+function saveSiteText(){
+  siteConfig.eyebrow = document.getElementById('editEyebrow').value;
+  saveData();
+  alert("Tagline updated!");
+}
+
+/* AI COMMAND PROCESSOR */
+function sendAIChatCommand(){
+  const inputField = document.getElementById('aiUserPrompt');
+  if(!inputField) return;
+  const text = inputField.value.trim();
+  if(!text) return;
+
+  const chatBox = document.getElementById('aiChatBox');
+  chatBox.innerHTML += `<div class="chat-msg chat-user">${text}</div>`;
+  inputField.value = "";
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  let aiResponse = "";
+  const lower = text.toLowerCase();
+
+  if(lower.includes("reset") || lower.includes("clear") || lower.includes("delete all")){
+    if(confirm("AI: Are you sure you want to reset all website data?")){
+      localStorage.clear();
+      siteConfig = {...defaultSiteConfig};
+      teamsList = [...defaultTeamsList];
+      seasonsData = generateDefaultSeasons(teamsList);
+      fixtures = [];
+      players = [];
+      saveData();
+      aiResponse = "🔄 Website data completely reset to defaults!";
+    } else {
+      aiResponse = "Reset cancelled.";
+    }
+  } else if(lower.startsWith("add team")){
+    const tName = text.substring(9).trim();
+    if(tName && !teamsList.includes(tName)){
+      teamsList.push(tName);
+      for(let s in seasonsData){
+        seasonsData[s].push({name: tName, played:0, won:0, lost:0, nrr:"0.000", points:0});
+      }
+      saveData();
+      aiResponse = `✅ Team '${tName}' added successfully!`;
+    } else {
+      aiResponse = "❌ Team already exists or name invalid.";
+    }
+  } else if(lower.startsWith("delete team")){
+    const tName = text.substring(11).trim();
+    if(teamsList.includes(tName)){
+      teamsList = teamsList.filter(t => t.toLowerCase() !== tName.toLowerCase());
+      for(let s in seasonsData){
+        seasonsData[s] = seasonsData[s].filter(t => t.name.toLowerCase() !== tName.toLowerCase());
+      }
+      saveData();
+      aiResponse = `🗑️ Team '${tName}' deleted successfully!`;
+    } else {
+      aiResponse = "❌ Team not found.";
+    }
+  } else if(lower.includes("rename team")){
+    const parts = text.replace(/rename team/i, "").split("to");
+    if(parts.length === 2){
+      const oldName = parts[0].trim();
+      const newName = parts[1].trim();
+      const idx = teamsList.findIndex(t => t.toLowerCase() === oldName.toLowerCase());
+      if(idx !== -1){
+        teamsList[idx] = newName;
+        for(let s in seasonsData){
+          seasonsData[s].forEach(t => { if(t.name.toLowerCase() === oldName.toLowerCase()) t.name = newName; });
+        }
+        players.forEach(p => { if(p.team.toLowerCase() === oldName.toLowerCase()) p.team = newName; });
+        fixtures.forEach(f => {
+          if(f.team1.toLowerCase() === oldName.toLowerCase()) f.team1 = newName;
+          if(f.team2.toLowerCase() === oldName.toLowerCase()) f.team2 = newName;
+        });
+        saveData();
+        aiResponse = `✏️ Team renamed from '${oldName}' to '${newName}'!`;
+      } else {
+        aiResponse = "❌ Old team name not found.";
+      }
+    } else {
+      aiResponse = "Format: 'rename team [Old] to [New]'";
+    }
+  } else if(lower.includes("beat") || lower.includes("defeated")){
+    let updated = false;
+    let currentTeams = seasonsData[activeSeason];
+    teamsList.forEach(t1 => {
+      teamsList.forEach(t2 => {
+        if(t1 !== t2 && lower.includes(t1.toLowerCase()) && lower.includes(t2.toLowerCase())){
+          let winner = currentTeams.find(t => t.name.toLowerCase() === t1.toLowerCase());
+          let loser = currentTeams.find(t => t.name.toLowerCase() === t2.toLowerCase());
+          if(winner && loser){
+            winner.played += 1; winner.won += 1; winner.points += 2;
+            loser.played += 1; loser.lost += 1;
+            fixtures.push({ id: Date.now(), title: `Match`, team1: winner.name, team2: loser.name, status: "Completed", result: `${winner.name} won` });
+            saveData();
+            aiResponse = `🏆 Match recorded! ${winner.name} defeated ${loser.name}. Points table & fixtures updated!`;
+            updated = true;
+          }
+        }
+      });
+    });
+    if(!updated){
+      aiResponse = "❌ Could not detect team names. Make sure exact team names are mentioned.";
+    }
+  } else if(lower.startsWith("add player")){
+    const nameMatch = text.match(/add player\s+([a-zA-Z0-9\s]+?)\s+to/i);
+    const teamMatch = text.match(/to\s+([a-zA-Z0-9\s]+?)\s+as/i) || text.match(/to\s+([a-zA-Z0-9\s]+?)\s+with/i);
+    const roleMatch = text.match(/as\s+(Batter|Bowler)/i);
+    const runMatch = text.match(/(\d+)\s*runs/i);
+
+    const pName = nameMatch ? nameMatch[1].trim() : "New Player";
+    const tName = teamMatch ? teamMatch[1].trim() : teamsList[0];
+    const role = roleMatch ? roleMatch[1] : "Batter";
+    const runs = runMatch ? parseInt(runMatch[1]) : 0;
+
+    players.push({
+      id: Date.now(),
+      name: pName,
+      team: tName,
+      role: role,
+      matches: 1,
+      runs: runs,
+      highest: runs,
+      average: runs.toString(),
+      strikeRate: "125.0",
+      wickets: 0,
+      economy: "0.0"
+    });
+    saveData();
+    aiResponse = `👤 Player '${pName}' added to ${tName} as ${role} with ${runs} runs!`;
+  } else if(lower.startsWith("delete player")){
+    const pName = text.substring(13).trim();
+    const initialLen = players.length;
+    players = players.filter(p => p.name.toLowerCase() !== pName.toLowerCase());
+    if(players.length < initialLen){
+      saveData();
+      aiResponse = `🗑️ Player '${pName}' deleted successfully!`;
+    } else {
+      aiResponse = `❌ Player '${pName}' not found.`;
+    }
+  } else {
+    aiResponse = "🤖 Command not recognized. Try: 'add team X', 'delete team X', 'Team A beat Team B', 'add player Ali to Team A as Batter with 50 runs', or 'reset data'.";
+  }
+
+  setTimeout(() => {
+    chatBox.innerHTML += `<div class="chat-msg chat-ai">${aiResponse}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }, 300);
+}
+
+function resetDefaultData(){
+  if(confirm("Are you sure you want to reset all website data to defaults?")){
+    localStorage.clear();
+    siteConfig = defaultSiteConfig;
+    teamsList = defaultTeamsList;
+    seasonsData = generateDefaultSeasons(teamsList);
+    fixtures = [];
+    players = [];
+    saveData();
+    closeModal('adminModal');
+  }
+}
+
+const searchEl = document.getElementById("playerSearch");
+const teamFilterEl = document.getElementById("teamFilter");
+const roleFilterEl = document.getElementById("roleFilter");
+
+if(searchEl) searchEl.addEventListener("input", renderPlayers);
+if(teamFilterEl) teamFilterEl.addEventListener("change", renderPlayers);
+if(roleFilterEl) roleFilterEl.addEventListener("change", renderPlayers);
+
+renderAll();
+</script>
+</body>
+</html>
