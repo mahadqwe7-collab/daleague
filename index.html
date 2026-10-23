@@ -1,1075 +1,317 @@
-<!doctype html>
-<html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-<!-- This site is hosted on Netlify. Anyone can build and deploy a site
-     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=b3ae493a-1777-47fb-8684-cf2ace9431bf
-     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DA League - Season 1</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                gold: "#F59E0B",
-                teal: "#14B8A6",
-                cyan: "#06B6D4",
-                dark: "#0F172A",
-                card: "#1E293B",
-                accent: "#3B82F6",
-              },
-            },
-            fontFamily: {
-              sans: ["Inter", "sans-serif"],
-            },
-          },
-        },
-      };
-    </script>
-    <!-- Google Fonts & Font Awesome Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
 
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #090d16;
-        color: #f8fafc;
-      }
-      .glass-panel {
-        background: rgba(30, 41, 59, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-      .glass-card {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        transition: all 0.3s ease;
-      }
-      .glass-card:hover {
-        border-color: rgba(20, 184, 166, 0.4);
-        transform: translateY(-4px);
-      }
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #090d16;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #334155;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #14b8a6;
-      }
-    </style>
-  </head>
-  <body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
-    <!-- ================= NAVBAR ================= -->
-    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-          <!-- Logo / Branding -->
-          <a href="#home" class="flex items-center gap-3 group">
-            <div
-              class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 via-teal-500 to-blue-600 p-0.5 shadow-lg group-hover:scale-105 transition-transform"
-            >
-              <div
-                class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center"
-              >
-                <i class="fa-solid font-black text-amber-400 text-xl">DA</i>
-              </div>
-            </div>
-            <div>
-              <span
-                class="text-2xl font-black tracking-wider bg-gradient-to-r from-amber-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent"
-                >DA LEAGUE</span
-              >
-              <span
-                class="block text-xs font-semibold tracking-widest text-teal-400 uppercase"
-                >Season 1</span
-              >
-            </div>
-          </a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DA League | Season Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07111f; --panel:#102238; --line:#20344a;
+  --text:#f3f7fc; --muted:#8da2b9; --gold:#f5b942;
+  --teal:#27d3b0; --purple:#b39aff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:radial-gradient(ellipse at top,#12304a,transparent 45%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1150px,92%);margin:auto}
+header{position:sticky;top:0;background:#07111ff2;border-bottom:1px solid var(--line);z-index:10}
+nav{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:900;letter-spacing:2px}
+.brand span{color:var(--gold)}
+.links{display:flex;gap:18px;flex-wrap:wrap}
+.links a{font-size:12px;color:#c3d0df;font-weight:700}
+.links a:hover{color:var(--gold)}
+.hero{padding:70px 0 45px}
+.eyebrow,.tag{display:inline-block;border:1px solid #f5b94255;background:#f5b94212;color:var(--gold);padding:7px 12px;border-radius:30px;font-size:11px;font-weight:800;letter-spacing:1px}
+h1{font-size:clamp(42px,8vw,78px);line-height:1.02;letter-spacing:-3px;margin:22px 0}
+.gradient{background:linear-gradient(90deg,var(--gold),var(--teal));color:transparent;background-clip:text}
+.btn{display:inline-block;margin:8px 8px 0 0;padding:13px 17px;border-radius:10px;font-size:12px;font-weight:800}
+.primary{background:var(--gold);color:#111827}
+.secondary{background:var(--panel);border:1px solid var(--line)}
+section{padding:34px 0}
+.section-head{margin-bottom:20px}
+.kicker{color:var(--teal);font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+h2{font-size:clamp(25px,4vw,36px);margin:7px 0}
+.sub{color:var(--muted);font-size:12px;line-height:1.8}
+.season-grid,.team-grid,.player-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.season-card,.team-card,.player-card,.panel{background:linear-gradient(145deg,#11243a,#0b1828);border:1px solid var(--line);border-radius:16px;padding:20px}
+.season-card{min-height:185px}
+.season-card.active{border-color:var(--gold)}
+.season-number{font-size:10px;color:var(--teal);font-weight:900;letter-spacing:2px}
+.season-card h3{margin:15px 0 7px}
+.season-card p,.team-card p{font-size:12px;color:var(--muted);line-height:1.7}
+.status{display:inline-block;margin-top:10px;color:var(--gold);font-size:10px;font-weight:900;letter-spacing:1px}
+.soon{color:var(--purple)}
+.panel{padding:0;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:620px}
+th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);font-size:12px;white-space:nowrap}
+th{background:#102238;color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+.gold{color:var(--gold);font-weight:800}
+.purple{color:var(--purple);font-weight:800}
+.player-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.player-card{padding:17px}
+.player-name{font-weight:800;font-size:14px}
+.player-meta{color:var(--muted);font-size:11px;margin-top:5px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:17px}
+.metric{padding:10px;background:#071522;border:1px solid var(--line);border-radius:9px}
+.metric span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}
+.metric strong{display:block;font-size:16px;margin-top:5px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+input,select{background:#0a1726;color:white;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;font-size:12px}
+.notice{margin-top:15px;padding:13px;border:1px solid #f5b94244;border-radius:10px;color:#d6c39a;font-size:11px;line-height:1.7}
+footer{border-top:1px solid var(--line);margin-top:35px;padding:25px 0;color:var(--muted);font-size:11px}
+@media(max-width:800px){.season-grid,.team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.player-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.links{gap:12px}}
+@media(max-width:520px){nav{padding:14px 0}.links{gap:10px}.links a{font-size:10px}.hero{padding-top:45px}h1{letter-spacing:-2px}.season-grid,.team-grid,.player-grid{grid-template-columns:1fr}.section-head{margin-bottom:15px}}
+</style>
+</head>
+<body>
 
-          <!-- Desktop Navigation Links -->
-          <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
-            <a
-              href="#home"
-              class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-amber-400 hover:bg-slate-800/60 transition"
-              >Home</a
-            >
-            <a
-              href="#standings"
-              class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-teal-400 hover:bg-slate-800/60 transition"
-              >Points Table</a
-            >
-            <a
-              href="#fixtures"
-              class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-teal-400 hover:bg-slate-800/60 transition"
-              >Fixtures</a
-            >
-            <a
-              href="#orange-cap"
-              class="px-3 py-2 rounded-lg text-sm font-semibold text-amber-400 hover:bg-amber-500/10 transition"
-              ><i class="fa-solid fa-graduation-cap mr-1"></i> Orange Cap</a
-            >
-            <a
-              href="#purple-cap"
-              class="px-3 py-2 rounded-lg text-sm font-semibold text-purple-400 hover:bg-purple-500/10 transition"
-              ><i class="fa-solid fa-hat-wizard mr-1"></i> Purple Cap</a
-            >
-            <a
-              href="#teams"
-              class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-teal-400 hover:bg-slate-800/60 transition"
-              >Teams</a
-            >
-          </nav>
-
-          <!-- Mobile Menu Button -->
-          <button
-            id="mobileMenuBtn"
-            class="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none"
-          >
-            <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Mobile Navigation Drawer -->
-      <div
-        id="mobileMenu"
-        class="hidden md:hidden border-b border-slate-800 bg-slate-900/95 px-4 pt-2 pb-6 space-y-2"
-      >
-        <a
-          href="#home"
-          class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800 hover:text-amber-400"
-          >Home</a
-        >
-        <a
-          href="#standings"
-          class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800 hover:text-teal-400"
-          >Points Table</a
-        >
-        <a
-          href="#fixtures"
-          class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800 hover:text-teal-400"
-          >Fixtures</a
-        >
-        <a
-          href="#orange-cap"
-          class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-medium text-amber-400 hover:bg-slate-800"
-          >Orange Cap</a
-        >
-        <a
-          href="#purple-cap"
-          class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-medium text-purple-400 hover:bg-slate-800"
-          >Purple Cap</a
-        >
-        <a
-          href="#teams"
-          class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800 hover:text-teal-400"
-          >Teams</a
-        >
-      </div>
-    </header>
-
-    <!-- ================= HERO SECTION ================= -->
-    <section id="home" class="relative py-16 md:py-20 overflow-hidden">
-      <!-- Background Glows -->
-      <div
-        class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"
-      ></div>
-      <div
-        class="absolute top-1/3 right-10 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"
-      ></div>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center max-w-3xl mx-auto space-y-6">
-          <!-- Tagline -->
-          <div
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/80 border border-slate-700 text-amber-400 text-xs sm:text-sm font-semibold tracking-wider uppercase"
-          >
-            <i class="fa-solid fa-trophy text-amber-400"></i> Official
-            Tournament Hub
-          </div>
-
-          <!-- Main Title -->
-          <h1
-            class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none no-underline"
-          >
-            WELCOME TO <br />
-            <span
-              class="bg-gradient-to-r from-amber-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent no-underline"
-              >SEASON 1</span
-            >
-          </h1>
-           <!-- Is line ko index.html mein add karo -->
-          <h1 style="color: #4F46E5; text-align: center; margin-top: 20px;">
-           🚀 Test Success! Website Successfully Updated!
-          </h1>
-
-          <!-- Subtitle -->
-          <p
-            class="text-slate-300 text-base sm:text-xl font-normal leading-relaxed"
-          >
-            Featuring Team A, Team B, Team C, and Team D. Follow the official
-            match schedule, standings, and team rosters below.
-          </p>
-
-          <!-- Action Buttons -->
-          <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <a
-              href="#standings"
-              class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-base hover:shadow-lg hover:shadow-amber-500/20 hover:scale-105 transition"
-            >
-              View Points Table <i class="fa-solid fa-table-list ml-2"></i>
-            </a>
-            <a
-              href="#fixtures"
-              class="px-8 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-base border border-slate-700 transition"
-            >
-              Match Schedule <i class="fa-solid fa-calendar-days ml-2"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= POINTS TABLE SECTION ================= -->
-    <section
-      id="standings"
-      class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-    >
-      <div
-        class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"
-      >
-        <div>
-          <div
-            class="text-xs font-bold text-teal-400 uppercase tracking-widest mb-1"
-          >
-            League Standings
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
-            Points Table
-          </h2>
-        </div>
-      </div>
-
-      <!-- Table Container -->
-      <div
-        class="glass-panel rounded-2xl overflow-hidden border border-slate-800 shadow-2xl"
-      >
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-300">
-            <thead
-              class="bg-slate-900/90 text-xs uppercase tracking-wider text-slate-400 border-b border-slate-800"
-            >
-              <tr>
-                <th scope="col" class="py-4 px-4 text-center">Pos</th>
-                <th scope="col" class="py-4 px-6">Team</th>
-                <th scope="col" class="py-4 px-4 text-center">P</th>
-                <th scope="col" class="py-4 px-4 text-center">W</th>
-                <th scope="col" class="py-4 px-4 text-center">L</th>
-                <th scope="col" class="py-4 px-4 text-center">T</th>
-                <th scope="col" class="py-4 px-6 text-center">NRR</th>
-                <th
-                  scope="col"
-                  class="py-4 px-6 text-center font-bold text-amber-400"
-                >
-                  PTS
-                </th>
-              </tr>
-            </thead>
-            <tbody
-              id="pointsTableBody"
-              class="divide-y divide-slate-800/60 font-medium"
-            >
-              <!-- Rendered dynamically by JS -->
-            </tbody>
-          </table>
-        </div>
-        <div
-          class="bg-slate-900/50 p-4 border-t border-slate-800/60 text-xs text-slate-400"
-        >
-          <span
-            ><b>P:</b> Played | <b>W:</b> Won | <b>L:</b> Lost | <b>T:</b> Tied
-            | <b>NRR:</b> Net Run Rate | <b>PTS:</b> Points</span
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= MATCH FIXTURES / SCHEDULE ================= -->
-    <section
-      id="fixtures"
-      class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-    >
-      <div class="mb-8">
-        <div
-          class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-1"
-        >
-          Schedule & Fixtures
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
-          Match Schedule
-        </h2>
-      </div>
-
-      <!-- Fixtures Grid -->
-      <div
-        id="fixturesGrid"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        <!-- Rendered dynamically by JS -->
-      </div>
-    </section>
-
-    <!-- ================= ORANGE CAP LEADERBOARD ================= -->
-    <section
-      id="orange-cap"
-      class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-    >
-      <div
-        class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"
-      >
-        <div>
-          <div
-            class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-1 flex items-center gap-2"
-          >
-            <i class="fa-solid fa-fire text-amber-500"></i> Batting Leaders
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
-            Orange Cap Standings
-          </h2>
-          <p class="text-slate-400 text-sm mt-1">
-            Leading run scorers in DA League Season 1
-          </p>
-        </div>
-        <div
-          class="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center gap-2 self-start md:self-auto"
-        >
-          <i class="fa-solid fa-trophy"></i> Top Batter Award
-        </div>
-      </div>
-
-      <div
-        class="glass-panel rounded-2xl overflow-hidden border border-amber-500/20 shadow-2xl"
-      >
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-300">
-            <thead
-              class="bg-slate-900/90 text-xs uppercase tracking-wider text-amber-400/90 border-b border-slate-800"
-            >
-              <tr>
-                <th scope="col" class="py-4 px-4 text-center">Rank</th>
-                <th scope="col" class="py-4 px-6">Player</th>
-                <th scope="col" class="py-4 px-4 text-center">Team</th>
-                <th scope="col" class="py-4 px-4 text-center">M</th>
-                <th
-                  scope="col"
-                  class="py-4 px-6 text-center font-black text-amber-400"
-                >
-                  Runs
-                </th>
-                <th scope="col" class="py-4 px-4 text-center">Avg</th>
-                <th scope="col" class="py-4 px-4 text-center">HS</th>
-                <th scope="col" class="py-4 px-4 text-center">SR</th>
-                <th scope="col" class="py-4 px-4 text-center">100s/50s</th>
-              </tr>
-            </thead>
-            <tbody
-              id="orangeCapTableBody"
-              class="divide-y divide-slate-800/60 font-medium"
-            >
-              <!-- Rendered dynamically by JS -->
-            </tbody>
-          </table>
-        </div>
-        <div
-          class="bg-slate-900/50 p-4 border-t border-slate-800/60 text-xs text-slate-400"
-        >
-          <span
-            ><b>M:</b> Matches | <b>Avg:</b> Batting Average |
-            <b>HS:</b> Highest Score | <b>SR:</b> Strike Rate</span
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= PURPLE CAP LEADERBOARD ================= -->
-    <section
-      id="purple-cap"
-      class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-    >
-      <div
-        class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"
-      >
-        <div>
-          <div
-            class="text-xs font-bold text-purple-400 uppercase tracking-widest mb-1 flex items-center gap-2"
-          >
-            <i class="fa-solid fa-bolt text-purple-400"></i> Bowling Leaders
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
-            Purple Cap Standings
-          </h2>
-          <p class="text-slate-400 text-sm mt-1">
-            Leading wicket takers in DA League Season 1
-          </p>
-        </div>
-        <div
-          class="px-4 py-2 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center gap-2 self-start md:self-auto"
-        >
-          <i class="fa-solid fa-trophy"></i> Top Bowler Award
-        </div>
-      </div>
-
-      <div
-        class="glass-panel rounded-2xl overflow-hidden border border-purple-500/20 shadow-2xl"
-      >
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-300">
-            <thead
-              class="bg-slate-900/90 text-xs uppercase tracking-wider text-purple-300 border-b border-slate-800"
-            >
-              <tr>
-                <th scope="col" class="py-4 px-4 text-center">Rank</th>
-                <th scope="col" class="py-4 px-6">Player</th>
-                <th scope="col" class="py-4 px-4 text-center">Team</th>
-                <th scope="col" class="py-4 px-4 text-center">M</th>
-                <th scope="col" class="py-4 px-4 text-center">Overs</th>
-                <th
-                  scope="col"
-                  class="py-4 px-6 text-center font-black text-purple-400"
-                >
-                  Wkts
-                </th>
-                <th scope="col" class="py-4 px-4 text-center">Econ</th>
-                <th scope="col" class="py-4 px-4 text-center">BBM</th>
-                <th scope="col" class="py-4 px-4 text-center">4w/5w</th>
-              </tr>
-            </thead>
-            <tbody
-              id="purpleCapTableBody"
-              class="divide-y divide-slate-800/60 font-medium"
-            >
-              <!-- Rendered dynamically by JS -->
-            </tbody>
-          </table>
-        </div>
-        <div
-          class="bg-slate-900/50 p-4 border-t border-slate-800/60 text-xs text-slate-400"
-        >
-          <span
-            ><b>M:</b> Matches | <b>Overs:</b> Overs Bowled |
-            <b>Econ:</b> Economy Rate | <b>BBM:</b> Best Bowling in Match</span
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= TEAMS SECTION ================= -->
-    <section
-      id="teams"
-      class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-    >
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <div
-          class="text-xs font-bold text-teal-400 uppercase tracking-widest mb-1"
-        >
-          Participants
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Teams</h2>
-        <p class="text-slate-400 text-sm mt-2">
-          Participating franchises in DA League Season 1
-        </p>
-      </div>
-
-      <div
-        id="teamsGrid"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-      >
-        <!-- Rendered dynamically by JS -->
-      </div>
-    </section>
-
-    <!-- ================= SQUAD MODAL ================= -->
-    <div
-      id="squadModal"
-      class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-    >
-      <div
-        class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl p-6 relative max-h-[90vh] overflow-y-auto"
-      >
-        <button
-          onclick="closeSquadModal()"
-          class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"
-        >
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <div id="modalContent">
-          <!-- Dynamic Content loaded via JavaScript -->
-        </div>
-      </div>
+<header>
+  <nav class="wrap">
+    <a class="brand" href="#home">DA <span>LEAGUE</span></a>
+    <div class="links">
+      <a href="#seasons">SEASONS</a>
+      <a href="#standings">STANDINGS</a>
+      <a href="#fixtures">FIXTURES</a>
+      <a href="#players">PLAYERS</a>
+      <a href="#teams">TEAMS</a>
     </div>
+  </nav>
+</header>
 
-    <!-- ================= FOOTER ================= -->
-    <footer class="border-t border-slate-800 bg-slate-950 mt-16 py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          class="flex flex-col md:flex-row items-center justify-between gap-6"
-        >
-          <!-- Branding -->
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 font-black"
-            >
-              DA
-            </div>
-            <div>
-              <span class="text-lg font-black text-white">DA LEAGUE</span>
-              <span class="block text-xs text-slate-400">Season 1</span>
-            </div>
-          </div>
+<main id="home">
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">TOURNAMENT DASHBOARD</span>
+    <h1>THE GAME.<br><span class="gradient">THE GLORY.</span></h1>
+    <a class="btn primary" href="#standings">VIEW STANDINGS</a>
+    <a class="btn secondary" href="#players">PLAYER RECORDS</a>
+    <p class="sub">Sample player data is for demonstration only. Replace it with official league records.</p>
+  </div>
+</section>
 
-          <!-- Footer Navigation -->
-          <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
-            <a href="#home" class="hover:text-amber-400 transition">Home</a>
-            <a href="#standings" class="hover:text-teal-400 transition"
-              >Points Table</a
-            >
-            <a href="#fixtures" class="hover:text-teal-400 transition"
-              >Fixtures</a
-            >
-            <a href="#orange-cap" class="hover:text-amber-400 transition"
-              >Orange Cap</a
-            >
-            <a href="#purple-cap" class="hover:text-purple-400 transition"
-              >Purple Cap</a
-            >
-            <a href="#teams" class="hover:text-teal-400 transition">Teams</a>
-          </div>
-        </div>
+<section id="seasons">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Tournament timeline</div>
+      <h2>Explore Seasons</h2>
+      <p class="sub">Select a season to follow its tournament progress.</p>
+    </div>
+    <div class="season-grid">
+      <article class="season-card active">
+        <div class="season-number">SEASON 01</div>
+        <h3>DA League — Season 1</h3>
+        <p>Current season standings, fixtures and player records.</p>
+        <span class="status">● CURRENT SEASON</span>
+      </article>
+      <article class="season-card">
+        <div class="season-number">SEASON 02</div>
+        <h3>Season 2</h3>
+        <p>New season and fresh competition.</p>
+        <span class="status soon">◷ COMING SOON</span>
+      </article>
+      <article class="season-card">
+        <div class="season-number">SEASON 03</div>
+        <h3>Season 3</h3>
+        <p>Future tournament details will appear here.</p>
+        <span class="status soon">◷ COMING SOON</span>
+      </article>
+      <article class="season-card">
+        <div class="season-number">SEASON 04</div>
+        <h3>Season 4</h3>
+        <p>Stay tuned for future league updates.</p>
+        <span class="status soon">◷ COMING SOON</span>
+      </article>
+    </div>
+  </div>
+</section>
 
-        <div
-          class="border-t border-slate-900 mt-8 pt-6 text-center text-xs text-slate-500"
-        >
-          <p>DA League Season 1 - Official Hub</p>
-        </div>
-      </div>
-    </footer>
+<section id="standings">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">League overview</div>
+      <h2>Points Table</h2>
+      <p class="sub">Season 1 standings.</p>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Pos</th><th>Team</th><th>Played</th><th>Won</th><th>Lost</th><th>NRR</th><th>Points</th></tr></thead>
+        <tbody id="pointsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-    <!-- ================= JAVASCRIPT LOGIC ================= -->
-    <script>
-      // Helper function to generate generic numbered players
-      function generateGenericSquad(count = 11) {
-        const squad = [];
-        for (let i = 1; i <= count; i++) {
-          squad.push({ name: `Player ${i}` });
-        }
-        return squad;
-      }
+<section id="fixtures">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Match centre</div>
+      <h2>Fixtures</h2>
+      <p class="sub">Match schedule and results will be updated here.</p>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Match</th><th>Fixture</th><th>Result</th><th>Status</th></tr></thead>
+        <tbody id="fixturesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-      // Default Orange Cap Data Store
-      const orangeCapData = [
-        {
-          rank: 1,
-          name: "Player 1",
-          team: "Team A",
-          teamHex: "#F59E0B",
-          matches: 0,
-          runs: 0,
-          avg: "0.00",
-          hs: "0",
-          sr: "0.00",
-          milestone: "0/0",
-        },
-        {
-          rank: 2,
-          name: "Player 2",
-          team: "Team B",
-          teamHex: "#14B8A6",
-          matches: 0,
-          runs: 0,
-          avg: "0.00",
-          hs: "0",
-          sr: "0.00",
-          milestone: "0/0",
-        },
-        {
-          rank: 3,
-          name: "Player 3",
-          team: "Team C",
-          teamHex: "#06B6D4",
-          matches: 0,
-          runs: 0,
-          avg: "0.00",
-          hs: "0",
-          sr: "0.00",
-          milestone: "0/0",
-        },
-        {
-          rank: 4,
-          name: "Player 4",
-          team: "Team D",
-          teamHex: "#A855F7",
-          matches: 0,
-          runs: 0,
-          avg: "0.00",
-          hs: "0",
-          sr: "0.00",
-          milestone: "0/0",
-        },
-        {
-          rank: 5,
-          name: "Player 5",
-          team: "Team A",
-          teamHex: "#F59E0B",
-          matches: 0,
-          runs: 0,
-          avg: "0.00",
-          hs: "0",
-          sr: "0.00",
-          milestone: "0/0",
-        },
-      ];
+<section id="players">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Performance centre</div>
+      <h2>Player Records</h2>
+      <p class="sub">Search players or filter records by team.</p>
+    </div>
+    <div class="toolbar">
+      <input id="playerSearch" type="search" placeholder="Search player or team...">
+      <select id="teamFilter">
+        <option value="All">All teams</option>
+        <option>Team A</option><option>Team B</option>
+        <option>Team C</option><option>Team D</option>
+      </select>
+    </div>
+    <div class="player-grid" id="playerGrid"></div>
+    <div class="notice">DEMO DATA: all example players are placeholders, not real league statistics. Edit the players array in this HTML file to add official records.</div>
+  </div>
+</section>
 
-      // Default Purple Cap Data Store
-      const purpleCapData = [
-        {
-          rank: 1,
-          name: "Player 3",
-          team: "Team C",
-          teamHex: "#06B6D4",
-          matches: 0,
-          overs: "0.0",
-          wkts: 0,
-          econ: "0.00",
-          bbm: "0/0",
-          milestone: "0/0",
-        },
-        {
-          rank: 2,
-          name: "Player 4",
-          team: "Team D",
-          teamHex: "#A855F7",
-          matches: 0,
-          overs: "0.0",
-          wkts: 0,
-          econ: "0.00",
-          bbm: "0/0",
-          milestone: "0/0",
-        },
-        {
-          rank: 3,
-          name: "Player 1",
-          team: "Team A",
-          teamHex: "#F59E0B",
-          matches: 0,
-          overs: "0.0",
-          wkts: 0,
-          econ: "0.00",
-          bbm: "0/0",
-          milestone: "0/0",
-        },
-        {
-          rank: 4,
-          name: "Player 2",
-          team: "Team B",
-          teamHex: "#14B8A6",
-          matches: 0,
-          overs: "0.0",
-          wkts: 0,
-          econ: "0.00",
-          bbm: "0/0",
-          milestone: "0/0",
-        },
-        {
-          rank: 5,
-          name: "Player 6",
-          team: "Team C",
-          teamHex: "#06B6D4",
-          matches: 0,
-          overs: "0.0",
-          wkts: 0,
-          econ: "0.00",
-          bbm: "0/0",
-          milestone: "0/0",
-        },
-      ];
+<section id="orange-cap">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Batting leaderboard</div>
+      <h2><span class="gold">Orange Cap</span></h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>Runs</th><th>Highest</th></tr></thead>
+        <tbody id="orangeBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-      // Data Store for Teams (Default initial standings set to 0)
-      const teamsData = [
-        {
-          id: "team-a",
-          name: "Team A",
-          tag: "TMA",
-          hex: "#F59E0B",
-          bgGradient: "from-amber-500/20 to-amber-900/10",
-          border: "border-amber-500/40",
-          played: 0,
-          won: 0,
-          lost: 0,
-          tie: 0,
-          nrr: "0.000",
-          pts: 0,
-          squad: generateGenericSquad(11),
-        },
-        {
-          id: "team-b",
-          name: "Team B",
-          tag: "TMB",
-          hex: "#14B8A6",
-          bgGradient: "from-teal-500/20 to-teal-900/10",
-          border: "border-teal-500/40",
-          played: 0,
-          won: 0,
-          lost: 0,
-          tie: 0,
-          nrr: "0.000",
-          pts: 0,
-          squad: generateGenericSquad(11),
-        },
-        {
-          id: "team-c",
-          name: "Team C",
-          tag: "TMC",
-          hex: "#06B6D4",
-          bgGradient: "from-cyan-500/20 to-cyan-900/10",
-          border: "border-cyan-500/40",
-          played: 0,
-          won: 0,
-          lost: 0,
-          tie: 0,
-          nrr: "0.000",
-          pts: 0,
-          squad: generateGenericSquad(11),
-        },
-        {
-          id: "team-d",
-          name: "Team D",
-          tag: "TMD",
-          hex: "#A855F7",
-          bgGradient: "from-purple-500/20 to-purple-900/10",
-          border: "border-purple-500/40",
-          played: 0,
-          won: 0,
-          lost: 0,
-          tie: 0,
-          nrr: "0.000",
-          pts: 0,
-          squad: generateGenericSquad(11),
-        },
-      ];
+<section id="purple-cap">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Bowling leaderboard</div>
+      <h2><span class="purple">Purple Cap</span></h2>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>Wickets</th><th>Economy</th></tr></thead>
+        <tbody id="purpleBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-      // All 6 round-robin matches set to default 'Upcoming' state
-      const matchesData = [
-        {
-          matchNo: "Match 1",
-          team1: "Team A",
-          team2: "Team B",
-          score1: "TBD",
-          score2: "TBD",
-          status: "Upcoming",
-        },
-        {
-          matchNo: "Match 2",
-          team1: "Team C",
-          team2: "Team D",
-          score1: "TBD",
-          score2: "TBD",
-          status: "Upcoming",
-        },
-        {
-          matchNo: "Match 3",
-          team1: "Team A",
-          team2: "Team C",
-          score1: "TBD",
-          score2: "TBD",
-          status: "Upcoming",
-        },
-        {
-          matchNo: "Match 4",
-          team1: "Team B",
-          team2: "Team D",
-          score1: "TBD",
-          score2: "TBD",
-          status: "Upcoming",
-        },
-        {
-          matchNo: "Match 5",
-          team1: "Team A",
-          team2: "Team D",
-          score1: "TBD",
-          score2: "TBD",
-          status: "Upcoming",
-        },
-        {
-          matchNo: "Match 6",
-          team1: "Team B",
-          team2: "Team C",
-          score1: "TBD",
-          score2: "TBD",
-          status: "Upcoming",
-        },
-      ];
+<section id="teams">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">League teams</div>
+      <h2>Teams</h2>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+</section>
+</main>
 
-      // --- RENDER POINTS TABLE ---
-      function renderPointsTable() {
-        const tableBody = document.getElementById("pointsTableBody");
-        tableBody.innerHTML = "";
+<footer>
+  <div class="wrap">DA LEAGUE · SEASON HUB · Example statistics are placeholders.</div>
+</footer>
 
-        teamsData.forEach((team, index) => {
-          const row = document.createElement("tr");
-          row.className =
-            "border-b border-slate-800/60 hover:bg-slate-800/40 transition";
+<script>
+const teams = [
+  {name:"Team A",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#f5b942"},
+  {name:"Team B",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#27d3b0"},
+  {name:"Team C",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#55a7ff"},
+  {name:"Team D",played:0,won:0,lost:0,nrr:"0.000",points:0,color:"#b39aff"}
+];
 
-          row.innerHTML = `
-                    <td class="py-4 px-4 text-center font-bold text-slate-400">
-                        ${index + 1}
-                    </td>
-                    <td class="py-4 px-6 font-bold flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-full flex items-center justify-center text-xs text-white font-extrabold" style="background-color: ${team.hex}">
-                            ${team.name.charAt(team.name.length - 1)}
-                        </span>
-                        <span class="text-white text-base">${team.name}</span>
-                    </td>
-                    <td class="py-4 px-4 text-center text-slate-300">${team.played}</td>
-                    <td class="py-4 px-4 text-center text-emerald-400 font-semibold">${team.won}</td>
-                    <td class="py-4 px-4 text-center text-rose-400 font-semibold">${team.lost}</td>
-                    <td class="py-4 px-4 text-center text-slate-400">${team.tie}</td>
-                    <td class="py-4 px-6 text-center text-slate-300">${team.nrr}</td>
-                    <td class="py-4 px-6 text-center font-black text-amber-400 text-base">${team.pts}</td>
-                `;
-          tableBody.appendChild(row);
-        });
-      }
+const fixtures = [
+  ["Match 1","Team A","Team B"],
+  ["Match 2","Team C","Team D"],
+  ["Match 3","Team A","Team C"],
+  ["Match 4","Team B","Team D"],
+  ["Match 5","Team A","Team D"],
+  ["Match 6","Team B","Team C"]
+];
 
-      // --- RENDER ORANGE CAP LEADERBOARD ---
-      function renderOrangeCapTable() {
-        const container = document.getElementById("orangeCapTableBody");
-        if (!container) return;
-        container.innerHTML = "";
+// Replace example names and stats with official data when ready.
+const players = [
+  {name:"Example Player 1",team:"Team A",role:"Batter",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 2",team:"Team B",role:"All-rounder",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 3",team:"Team C",role:"Bowler",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 4",team:"Team D",role:"Batter",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 5",team:"Team A",role:"Wicketkeeper",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 6",team:"Team B",role:"Bowler",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 7",team:"Team C",role:"All-rounder",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"},
+  {name:"Example Player 8",team:"Team D",role:"Bowler",matches:0,runs:0,highest:0,average:"—",strikeRate:"—",wickets:0,economy:"—"}
+];
 
-        orangeCapData.forEach((player) => {
-          const row = document.createElement("tr");
-          row.className =
-            "border-b border-slate-800/60 hover:bg-amber-500/5 transition";
+function renderStandings(){
+  document.getElementById("pointsBody").innerHTML = [...teams]
+    .sort((a,b)=>b.points-a.points)
+    .map((t,i)=>`<tr>
+      <td>${i+1}</td><td>${t.name}</td><td>${t.played}</td>
+      <td>${t.won}</td><td>${t.lost}</td><td>${t.nrr}</td>
+      <td class="gold">${t.points}</td></tr>`).join("");
 
-          row.innerHTML = `
-                    <td class="py-4 px-4 text-center font-extrabold ${player.rank === 1 ? "text-amber-400 text-base" : "text-slate-400"}">
-                        ${player.rank === 1 ? '<i class="fa-solid fa-crown mr-1"></i>1' : player.rank}
-                    </td>
-                    <td class="py-4 px-6 font-bold text-white flex items-center gap-2">
-                        <span>${player.name}</span>
-                    </td>
-                    <td class="py-4 px-4 text-center">
-                        <span class="px-2 py-0.5 rounded text-xs font-semibold text-white" style="background-color: ${player.teamHex}22; border: 1px solid ${player.teamHex}66">
-                            ${player.team}
-                        </span>
-                    </td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.matches}</td>
-                    <td class="py-4 px-6 text-center font-black text-amber-400 text-base">${player.runs}</td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.avg}</td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.hs}</td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.sr}</td>
-                    <td class="py-4 px-4 text-center text-slate-400">${player.milestone}</td>
-                `;
-          container.appendChild(row);
-        });
-      }
+  document.getElementById("fixturesBody").innerHTML = fixtures
+    .map(f=>`<tr><td>${f[0]}</td><td>${f[1]} vs ${f[2]}</td>
+      <td>—</td><td><span class="tag">Upcoming</span></td></tr>`).join("");
 
-      // --- RENDER PURPLE CAP LEADERBOARD ---
-      function renderPurpleCapTable() {
-        const container = document.getElementById("purpleCapTableBody");
-        if (!container) return;
-        container.innerHTML = "";
+  document.getElementById("teamGrid").innerHTML = teams
+    .map(t=>`<article class="team-card">
+      <div style="color:${t.color};font-size:12px;font-weight:900">DA LEAGUE TEAM</div>
+      <h3>${t.name}</h3><p>Season 1 participant</p></article>`).join("");
+}
 
-        purpleCapData.forEach((player) => {
-          const row = document.createElement("tr");
-          row.className =
-            "border-b border-slate-800/60 hover:bg-purple-500/5 transition";
+function renderPlayers(){
+  const query = document.getElementById("playerSearch").value.toLowerCase();
+  const team = document.getElementById("teamFilter").value;
 
-          row.innerHTML = `
-                    <td class="py-4 px-4 text-center font-extrabold ${player.rank === 1 ? "text-purple-400 text-base" : "text-slate-400"}">
-                        ${player.rank === 1 ? '<i class="fa-solid fa-crown mr-1"></i>1' : player.rank}
-                    </td>
-                    <td class="py-4 px-6 font-bold text-white flex items-center gap-2">
-                        <span>${player.name}</span>
-                    </td>
-                    <td class="py-4 px-4 text-center">
-                        <span class="px-2 py-0.5 rounded text-xs font-semibold text-white" style="background-color: ${player.teamHex}22; border: 1px solid ${player.teamHex}66">
-                            ${player.team}
-                        </span>
-                    </td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.matches}</td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.overs}</td>
-                    <td class="py-4 px-6 text-center font-black text-purple-400 text-base">${player.wkts}</td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.econ}</td>
-                    <td class="py-4 px-4 text-center text-slate-300">${player.bbm}</td>
-                    <td class="py-4 px-4 text-center text-slate-400">${player.milestone}</td>
-                `;
-          container.appendChild(row);
-        });
-      }
+  const filtered = players.filter(p =>
+    (p.name+" "+p.team+" "+p.role).toLowerCase().includes(query) &&
+    (team==="All" || p.team===team)
+  );
 
-      // --- RENDER FIXTURES ---
-      function renderFixtures() {
-        const container = document.getElementById("fixturesGrid");
-        container.innerHTML = "";
+  document.getElementById("playerGrid").innerHTML = filtered.length
+    ? filtered.map(p=>`<article class="player-card">
+      <div class="player-name">${p.name}</div>
+      <div class="player-meta">${p.team} · ${p.role} · DEMO</div>
+      <div class="metrics">
+        <div class="metric"><span>Matches</span><strong>${p.matches}</strong></div>
+        <div class="metric"><span>Runs</span><strong>${p.runs}</strong></div>
+        <div class="metric"><span>Highest</span><strong>${p.highest}</strong></div>
+        <div class="metric"><span>Average</span><strong>${p.average}</strong></div>
+        <div class="metric"><span>Strike rate</span><strong>${p.strikeRate}</strong></div>
+        <div class="metric"><span>Wickets</span><strong>${p.wickets}</strong></div>
+        <div class="metric"><span>Economy</span><strong>${p.economy}</strong></div>
+      </div></article>`).join("")
+    : '<div class="player-card">No players match your search.</div>';
 
-        matchesData.forEach((match) => {
-          const card = document.createElement("div");
-          card.className =
-            "glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4";
-          card.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">${match.matchNo}</span>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-400 uppercase tracking-wider">${match.status}</span>
-                    </div>
+  const batting = [...players].sort((a,b)=>b.runs-a.runs);
+  document.getElementById("orangeBody").innerHTML = batting.slice(0,5)
+    .map((p,i)=>`<tr><td>${i+1}</td><td>${p.name}</td><td>${p.team}</td><td>${p.runs}</td><td>${p.highest}</td></tr>`).join("");
 
-                    <div class="space-y-3 py-2">
-                        <!-- Team 1 -->
-                        <div class="flex items-center justify-between">
-                            <span class="font-extrabold text-white text-base">${match.team1}</span>
-                            <span class="text-sm font-semibold text-slate-400">${match.score1}</span>
-                        </div>
-                        <!-- Team 2 -->
-                        <div class="flex items-center justify-between">
-                            <span class="font-extrabold text-white text-base">${match.team2}</span>
-                            <span class="text-sm font-semibold text-slate-400">${match.score2}</span>
-                        </div>
-                    </div>
+  const bowling = [...players].sort((a,b)=>b.wickets-a.wickets);
+  document.getElementById("purpleBody").innerHTML = bowling.slice(0,5)
+    .map((p,i)=>`<tr><td>${i+1}</td><td>${p.name}</td><td>${p.team}</td><td>${p.wickets}</td><td>${p.economy}</td></tr>`).join("");
+}
 
-                    <div class="border-t border-slate-800/80 pt-3 text-xs text-slate-400 font-medium flex items-center justify-between">
-                        <span><i class="fa-regular fa-clock mr-1 text-teal-400"></i> Scheduled</span>
-                        <span class="text-slate-500">TBD</span>
-                    </div>
-                `;
-          container.appendChild(card);
-        });
-      }
+document.getElementById("playerSearch").addEventListener("input",renderPlayers);
+document.getElementById("teamFilter").addEventListener("change",renderPlayers);
 
-      // --- RENDER TEAMS GRID ---
-      function renderTeams() {
-        const container = document.getElementById("teamsGrid");
-        container.innerHTML = "";
-
-        teamsData.forEach((team) => {
-          const card = document.createElement("div");
-          card.className = `glass-panel rounded-2xl p-6 flex flex-col justify-between border ${team.border} hover:scale-[1.02] transition duration-300`;
-          card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr ${team.bgGradient} border ${team.border} flex items-center justify-center font-black text-2xl text-white">
-                                ${team.name.charAt(team.name.length - 1)}
-                            </div>
-                            <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">${team.tag}</span>
-                        </div>
-
-                        <h3 class="text-xl font-black text-white mb-2">${team.name}</h3>
-                    </div>
-
-                    <button onclick="openSquadModal('${team.id}')" class="mt-6 w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition border border-slate-700">
-                        View Squad <i class="fa-solid fa-users ml-1"></i>
-                    </button>
-                `;
-          container.appendChild(card);
-        });
-      }
-
-      // --- SQUAD MODAL HANDLERS ---
-      function openSquadModal(teamId) {
-        const team = teamsData.find((t) => t.id === teamId);
-        if (!team) return;
-
-        const modalContent = document.getElementById("modalContent");
-        modalContent.innerHTML = `
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl" style="background-color: ${team.hex}">
-                        ${team.name.charAt(team.name.length - 1)}
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-black text-white">${team.name}</h3>
-                        <p class="text-xs text-slate-400">Squad Roster</p>
-                    </div>
-                </div>
-
-                <div class="divide-y divide-slate-800">
-                    ${team.squad
-                      .map(
-                        (player, idx) => `
-                        <div class="py-3 flex items-center justify-between">
-                            <p class="text-sm font-bold text-white">${player.name}</p>
-                            <span class="text-xs text-slate-500">#${idx + 1}</span>
-                        </div>
-                    `,
-                      )
-                      .join("")}
-                </div>
-            `;
-
-        document.getElementById("squadModal").classList.remove("hidden");
-      }
-
-      function closeSquadModal() {
-        document.getElementById("squadModal").classList.add("hidden");
-      }
-
-      // Close modal when clicking backdrop
-      window.onclick = function (event) {
-        const modal = document.getElementById("squadModal");
-        if (event.target === modal) {
-          closeSquadModal();
-        }
-      };
-
-      // --- MOBILE MENU TOGGLE ---
-      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-      const menuIcon = document.getElementById("menuIcon");
-
-      mobileMenuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-        if (mobileMenu.classList.contains("hidden")) {
-          menuIcon.className = "fa-solid fa-bars text-xl";
-        } else {
-          menuIcon.className = "fa-solid fa-xmark text-xl";
-        }
-      });
-
-      document.querySelectorAll(".mobile-nav-link").forEach((link) => {
-        link.addEventListener("click", () => {
-          mobileMenu.classList.add("hidden");
-          menuIcon.className = "fa-solid fa-bars text-xl";
-        });
-      });
-
-      // --- INIT APP ---
-      window.onload = function () {
-        renderPointsTable();
-        renderOrangeCapTable();
-        renderPurpleCapTable();
-        renderFixtures();
-        renderTeams();
-      };
-    </script>
-  </body>
+renderStandings();
+renderPlayers();
+</script>
+</body>
 </html>
